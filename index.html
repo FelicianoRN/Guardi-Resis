@@ -13,33 +13,32 @@
             background: #f9fafb;
         }
         
-        /* Estilos personalizados para que se vea igual de bonito */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 20px; /* Aumentado de 12px a 20px */
-            max-width: none; /* Permite que se expanda más */
+            gap: 20px;
+            max-width: none;
         }
         
         .calendar-day {
-            min-height: 320px; /* Aumentado de 240px a 320px */
+            min-height: 320px;
             border: 2px solid #d1d5db;
-            border-radius: 16px; /* Aumentado de 12px a 16px */
-            padding: 20px; /* Aumentado de 16px a 20px */
+            border-radius: 16px;
+            padding: 20px;
             background: linear-gradient(to bottom, white, #f9fafb);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Sombra más prominente */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
         }
         
         .calendar-day:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12); /* Sombra más grande al hover */
-            transform: translateY(-3px); /* Más elevación */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-3px);
         }
         
         .day-header {
             font-weight: bold;
-            font-size: 22px; /* Aumentado de 20px */
-            margin-bottom: 20px; /* Aumentado de 16px */
+            font-size: 22px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -52,18 +51,18 @@
         
         .day-number {
             color: #374151;
-            font-size: 28px; /* Aumentado de 24px */
+            font-size: 28px;
             font-weight: 800;
         }
         
         .day-name {
-            font-size: 14px; /* Aumentado de 12px */
+            font-size: 14px;
             color: #6b7280;
             font-weight: 600;
             background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-            padding: 8px 14px; /* Aumentado padding */
-            border-radius: 8px; /* Aumentado de 6px */
-            margin-top: 6px; /* Aumentado de 4px */
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-top: 6px;
             text-align: center;
             border: 1px solid #d1d5db;
         }
@@ -72,33 +71,33 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 8px; /* Aumentado de 6px */
+            gap: 8px;
         }
         
         .badge-fds {
-            font-size: 12px; /* Aumentado de 11px */
+            font-size: 12px;
             background: #fcd34d;
             color: #92400e;
-            padding: 8px 12px; /* Aumentado padding */
-            border-radius: 14px; /* Aumentado de 12px */
+            padding: 8px 12px;
+            border-radius: 14px;
             font-weight: bold;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .badge-prefestivo {
-            font-size: 12px; /* Aumentado de 11px */
+            font-size: 12px;
             background: #dc2626;
             color: white;
-            padding: 8px 12px; /* Aumentado padding */
-            border-radius: 14px; /* Aumentado de 12px */
+            padding: 8px 12px;
+            border-radius: 14px;
             font-weight: bold;
             box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
         }
         
         .j-button {
-            font-size: 12px; /* Aumentado de 11px */
-            padding: 10px 16px; /* Aumentado padding */
-            border-radius: 18px; /* Aumentado de 16px */
+            font-size: 12px;
+            padding: 10px 16px;
+            border-radius: 18px;
             cursor: pointer;
             font-weight: bold;
             border: 2px solid;
@@ -132,15 +131,15 @@
         }
         
         .specialty-section {
-            margin-bottom: 14px; /* Aumentado de 12px */
+            margin-bottom: 14px;
         }
         
         .specialty-header {
-            font-size: 13px; /* Aumentado de 12px */
-            padding: 8px 14px; /* Aumentado padding */
-            border-radius: 10px; /* Aumentado de 8px */
+            font-size: 13px;
+            padding: 8px 14px;
+            border-radius: 10px;
             font-weight: bold;
-            margin-bottom: 8px; /* Aumentado de 6px */
+            margin-bottom: 8px;
             border: 1px solid rgba(0,0,0,0.1);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -148,14 +147,14 @@
         
         .guard-item {
             background: #f3f4f6;
-            padding: 8px 14px; /* Aumentado padding */
-            border-radius: 10px; /* Aumentado de 8px */
+            padding: 8px 14px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px; /* Aumentado de 12px */
+            font-size: 13px;
             border: 1px solid #e5e7eb;
-            margin-bottom: 6px; /* Aumentado de 4px */
+            margin-bottom: 6px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
         }
@@ -175,12 +174,12 @@
             color: #ef4444;
             cursor: pointer;
             font-weight: bold;
-            padding: 6px 10px; /* Aumentado padding */
+            padding: 6px 10px;
             border-radius: 50%;
             transition: all 0.2s ease;
             background: none;
             border: none;
-            font-size: 16px; /* Aumentado de 14px */
+            font-size: 16px;
         }
         
         .remove-btn:hover {
@@ -189,7 +188,6 @@
             transform: scale(1.2);
         }
         
-        /* Modal */
         .modal {
             position: fixed;
             top: 0;
@@ -213,7 +211,6 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
         
-        /* Tablas */
         .table-container {
             overflow-x: auto;
             border-radius: 12px;
@@ -273,7 +270,6 @@
         .weekend-day { background: #fef3c7 !important; color: #92400e !important; }
         .normal-day { background: #f0f9ff !important; }
         
-        /* Cards y contenedores */
         .card {
             background: white;
             border-radius: 12px;
@@ -290,7 +286,6 @@
             padding: 24px;
         }
         
-        /* Buttons */
         .btn {
             padding: 8px 16px;
             border-radius: 8px;
@@ -336,7 +331,6 @@
             background: #4b5563;
         }
         
-        /* Form elements */
         .form-select {
             width: 100%;
             border: 2px solid #d1d5db;
@@ -362,14 +356,12 @@
             color: #374151;
         }
         
-        /* Contenedor principal más ancho */
         #app {
-            max-width: 95vw; /* Aumentado para usar más ancho de pantalla */
+            max-width: 95vw;
             margin: 0 auto;
-            padding: 24px; /* Aumentado padding */
+            padding: 24px;
         }
         
-        /* Icons usando Unicode */
         .icon-calendar::before { content: "📅"; }
         .icon-plus::before { content: "➕"; }
         .icon-refresh::before { content: "🔄"; }
@@ -379,7 +371,6 @@
         .icon-hospital::before { content: "🏥"; }
         .icon-star::before { content: "⭐"; }
         
-        /* Responsivo mejorado */
         @media (max-width: 1200px) {
             .calendar-day {
                 min-height: 280px;
@@ -418,8 +409,6 @@
     </div>
 
     <script>
-        // Sistema de Gestión de Guardias - Versión mejorada
-        
         // Datos base
         const residentes = {
             'ÁLVARO PACHECO': 'PACHE',
@@ -479,14 +468,22 @@
         // Cargar datos del localStorage
         function cargarDatos() {
             try {
-                const guardias = localStorage.getItem('guardias-por-mes-2025');
-                const viernes = localStorage.getItem('viernes-especiales-2025');
-                const contadores = localStorage.getItem('contadores-totales-2025');
-                
-                estado.guardiasPorMes = guardias ? JSON.parse(guardias) : {};
-                estado.viernesEspeciales = viernes ? JSON.parse(viernes) : {};
-                estado.contadoresTotales = contadores ? JSON.parse(contadores) : inicializarContadores();
+                if (typeof(Storage) !== "undefined" && localStorage) {
+                    const guardias = localStorage.getItem('guardias-por-mes-2025');
+                    const viernes = localStorage.getItem('viernes-especiales-2025');
+                    const contadores = localStorage.getItem('contadores-totales-2025');
+                    
+                    estado.guardiasPorMes = guardias ? JSON.parse(guardias) : {};
+                    estado.viernesEspeciales = viernes ? JSON.parse(viernes) : {};
+                    estado.contadoresTotales = contadores ? JSON.parse(contadores) : inicializarContadores();
+                } else {
+                    console.warn('localStorage no disponible, usando valores por defecto');
+                    estado.guardiasPorMes = {};
+                    estado.viernesEspeciales = {};
+                    estado.contadoresTotales = inicializarContadores();
+                }
             } catch (e) {
+                console.warn('Error al cargar datos:', e);
                 estado.guardiasPorMes = {};
                 estado.viernesEspeciales = {};
                 estado.contadoresTotales = inicializarContadores();
@@ -495,9 +492,15 @@
 
         // Guardar datos en localStorage
         function guardarDatos() {
-            localStorage.setItem('guardias-por-mes-2025', JSON.stringify(estado.guardiasPorMes));
-            localStorage.setItem('viernes-especiales-2025', JSON.stringify(estado.viernesEspeciales));
-            localStorage.setItem('contadores-totales-2025', JSON.stringify(estado.contadoresTotales));
+            try {
+                if (typeof(Storage) !== "undefined" && localStorage) {
+                    localStorage.setItem('guardias-por-mes-2025', JSON.stringify(estado.guardiasPorMes));
+                    localStorage.setItem('viernes-especiales-2025', JSON.stringify(estado.viernesEspeciales));
+                    localStorage.setItem('contadores-totales-2025', JSON.stringify(estado.contadoresTotales));
+                }
+            } catch (e) {
+                console.warn('Error al guardar datos:', e);
+            }
         }
 
         // Utilidades
@@ -614,6 +617,101 @@
             renderizar();
         }
 
+        // Funciones de exportar/importar datos
+        function exportarDatos() {
+            const datos = {
+                guardiasPorMes: estado.guardiasPorMes,
+                viernesEspeciales: estado.viernesEspeciales,
+                contadoresTotales: estado.contadoresTotales,
+                fechaExportacion: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `guardias-datos-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Datos exportados correctamente');
+        }
+
+        function importarDatos(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const datos = JSON.parse(e.target.result);
+                    
+                    if (datos.guardiasPorMes && datos.contadoresTotales) {
+                        estado.guardiasPorMes = datos.guardiasPorMes;
+                        estado.viernesEspeciales = datos.viernesEspeciales || {};
+                        estado.contadoresTotales = datos.contadoresTotales;
+                        
+                        guardarDatos();
+                        renderizar();
+                        alert('✅ Datos importados correctamente');
+                    } else {
+                        alert('❌ El archivo no tiene el formato correcto');
+                    }
+                } catch (error) {
+                    alert('❌ Error al leer el archivo: ' + error.message);
+                }
+                
+                // Limpiar el input
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function generarHTMLConDatos() {
+            const datos = {
+                guardiasPorMes: estado.guardiasPorMes,
+                viernesEspeciales: estado.viernesEspeciales,
+                contadoresTotales: estado.contadoresTotales
+            };
+            
+            // Obtener el HTML actual completo
+            let htmlCompleto = document.documentElement.outerHTML;
+            
+            // Crear un HTML con datos pre-cargados
+            const htmlConDatos = htmlCompleto.replace(
+                'cargarDatos();',
+                `
+                // DATOS PRE-CARGADOS
+                const DATOS_PRECARGADOS = ${JSON.stringify(datos, null, 8)};
+                
+                // Cargar datos pre-cargados
+                if (DATOS_PRECARGADOS && Object.keys(DATOS_PRECARGADOS.guardiasPorMes || {}).length > 0) {
+                    estado.guardiasPorMes = DATOS_PRECARGADOS.guardiasPorMes;
+                    estado.viernesEspeciales = DATOS_PRECARGADOS.viernesEspeciales;
+                    estado.contadoresTotales = DATOS_PRECARGADOS.contadoresTotales;
+                    console.log('✅ Datos pre-cargados aplicados correctamente');
+                } else {
+                    cargarDatos();
+                }
+                `
+            );
+            
+            const blob = new Blob([htmlConDatos], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `sistema-guardias-COMPLETO-${new Date().toISOString().split('T')[0]}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('✅ HTML completo con datos generado correctamente!\nEste archivo contiene toda la aplicación + tus datos');
+        }
+
         // Funciones de renderizado
         function renderizar() {
             const app = document.getElementById('app');
@@ -656,7 +754,17 @@
                                     </div>
                                 </div>
                                 
-                                <div class="flex items-center">
+                                <div class="flex items-center gap-4">
+                                    <button onclick="exportarDatos()" class="btn btn-primary" style="padding: 12px 24px; font-size: 16px; font-weight: 700;">
+                                        📤 Exportar Datos
+                                    </button>
+                                    <button onclick="document.getElementById('importFile').click()" class="btn btn-secondary" style="padding: 12px 24px; font-size: 16px; font-weight: 700;">
+                                        📥 Importar Datos
+                                    </button>
+                                    <button onclick="generarHTMLConDatos()" class="btn" style="padding: 12px 24px; font-size: 16px; font-weight: 700; background: #10b981; color: white;">
+                                        🌐 HTML con Datos
+                                    </button>
+                                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importarDatos(event)">
                                     <button onclick="abrirModalReinicio()" class="btn btn-danger" style="padding: 12px 24px; font-size: 16px; font-weight: 700;">
                                         <span class="icon-refresh"></span>
                                         Reiniciar Todo
@@ -753,6 +861,14 @@
                                             <li class="flex items-center gap-2">
                                                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
                                                 Los jueves marcados como PREFESTIVO cuentan como VIERNES en los contadores
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                                "Exportar Datos" descarga un archivo JSON con toda la información
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                                "HTML con Datos" crea un archivo HTML completo con los datos incluidos
                                             </li>
                                             <li class="flex items-center gap-2">
                                                 <span class="w-2 h-2 bg-red-500 rounded-full"></span>
@@ -1014,27 +1130,36 @@
         }
 
         // Funciones globales para eventos
-        window.cambiarMes = function(mes) {
+        function cambiarMes(mes) {
             estado.mesActual = parseInt(mes);
             renderizar();
-        };
+        }
 
-        window.asignarGuardia = function() {
+        function asignarGuardia() {
             agregarGuardia(estado.diaSeleccionado, estado.especialidadSeleccionada, estado.residenteSeleccionado);
-        };
+        }
 
-        window.marcarJuevesFestivo = marcarJuevesFestivo;
-        window.quitarGuardia = quitarGuardia;
-
-        window.abrirModalReinicio = function() {
+        function abrirModalReinicio() {
             estado.mostrarModalReinicio = true;
             renderizar();
-        };
+        }
 
-        window.cerrarModal = function() {
+        function cerrarModal() {
             estado.mostrarModalReinicio = false;
             renderizar();
-        };
+        }
+
+        // Exponer funciones al scope global
+        window.cambiarMes = cambiarMes;
+        window.asignarGuardia = asignarGuardia;
+        window.marcarJuevesFestivo = marcarJuevesFestivo;
+        window.quitarGuardia = quitarGuardia;
+        window.exportarDatos = exportarDatos;
+        window.importarDatos = importarDatos;
+        window.generarHTMLConDatos = generarHTMLConDatos;
+        window.abrirModalReinicio = abrirModalReinicio;
+        window.cerrarModal = cerrarModal;
+        window.reiniciarTodo = reiniciarTodo;
 
         // Inicializar la aplicación
         cargarDatos();
