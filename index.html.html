@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Guardias - Residentes R2</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { Plus, Minus, Calendar, AlertCircle, RotateCcw } = lucide;
+
+        const GuardiasManager = () => {
+          // Mapeo de nombres completos a alias
+          const residentes = {
+            'ÁLVARO PACHECO': 'PACHE',
+            'ANA MARTIN MUELA': 'ANEKA',
+            'BLANCA URBIZU': 'BLANCH',
+            'ELENA SACRISTAN': 'ELENA',
+            'ENRIQUE GALLEGO': 'KIKE',
+            'MARIA ALICIA POSSE': 'ALI',
+            'MARIA GOMEZ CAMPO': 'MARÍA',
+            'MARÍA GÓMEZ JORGE': 'MER',
+            'MARTA RUS': 'MARTA',
+            'NOELIA MEDINA': 'NOE',
+            'SARA MORALES': 'SARA',
+            'SONIA GONZALEZ': 'SONIA'
+          };
+
+          const nombresCompletos = Object.keys(residentes);
+
+          // Especialidades con colores
+          const especialidades = {
+            'URA': { nombre: 'Urgencias', color: 'bg-purple-300 text-purple-800' },
+            'PEDIA': { nombre: 'Pediatría', color: 'bg-red-300 text-red-800' },
+            'TRAUMA': { nombre: 'Traumatología', color: 'bg-orange-300 text-orange-800' },
+            'PSIQUIA': { nombre: 'Psiquiatría', color: 'bg-blue-300 text-blue-800' },
+            'GINE': { nombre: 'Ginecología', color: 'bg-pink-300 text-pink-800' }
+          };
+
+          const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+          const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+          const [mesActual, setMesActual] = useState(0); // Enero
+          const añoActual = 2025; // Solo 2025
+
+          // Estados CON localStorage
+          const [guardiasPorMes, setGuardiasPorMes] = useState(() => {
+            try {
+              const saved = localStorage.getItem('guardias-por-mes-2025');
+              return saved ? JSON.parse(saved) : {};
+            } catch {
+              return {};
+            }
+          });
+
+          const [viernesEspeciales, setViernesEspeciales] = useState(() => {
+            try {
+              const saved = localStorage.getItem('viernes-especiales-2025');
+              return saved ? JSON.parse(saved) : {};
+            } catch {
+              return {};
+            }
+          });
+
+          const [contadoresTotales, setContadoresTotales] = useState(() => {
+            try {
+              const saved = localStorage.getItem('contadores-totales-2025');
+              if (saved) {
+                return JSON.parse(saved);
+              }
+            } catch {}
+            
+            const inicial = {};
+            nombresCompletos.forEach(nombre => {
+              inicial[nombre] = {
+                URA: 0, PEDIA: 0, TRAUMA: 0, PSIQUIA: 0, GINE: 0,
+                finDeSemana: 0, total: 0,
+                porDia: { Lunes: 0, Martes: 0, Miércoles: 0, Jueves: 0, Viernes: 0, Sábado: 0, Domingo: 0 }
+              };
+            });
+            return inicial;
+          });
+
+          // Estados para panel de asignación
+          const [diaSeleccionado, setDiaSeleccionado] = useState(1);
+          const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState('URA');
+          const [residenteSeleccionado, setResidenteSeleccionado] = useState(nombresCompletos[0]);
+          
+          // Estado para modal de confirmación
+          const [mostrarModalReinicio, setMostrarModalReinicio] = useState(false);
+
+          // Guardar en localStorage cuando cambien
+          useEffect(() => {
+            localStorage.setItem('guardias-por-mes-2025', JSON.stringify(guardiasPorMes));
+          }, [guardiasPorMes]);
+
+          useEffect(() => {
+            localStorage.setItem('viernes-especiales-2025', JSON.stringify(viernesEspeciales));
+          }, [viernesEspeciales]);
+
+          useEffect(() => {
+            localStorage.setItem('contadores-totales-2025', JSON.stringify(contadoresTotales));
+          }, [contadoresTotales]);
+
+          // Utilidades básicas
+          const getDiasDelMes = (mes, año) => new Date(año, mes + 1, 0).getDate();
+          const getDiaDeLaSemana = (dia, mes, año) => new Date(año, mes, dia).getDay();
+          const esFinDeSemana = (dia, mes, año) => {
+            const diaSemana = getDiaDeLaSemana(dia, mes, año);
+            return diaSemana === 0 || diaSemana === 5 || diaSemana === 6;
+          };
+
+          const getGuardiasDelMes = () => guardiasPorMes[`${añoActual}-${mesActual}`] || {};
+
+          // Verificar si es viernes especial
+          const esViernesEspecial = (dia, mes, año) => {
+            const clave = `${año}-${mes}-${dia}`;
+            return viernesEspeciales[clave] === true;
+          };
+
+          // FUNCIÓN REINICIAR CON MODAL
+          const abrirModalReinicio = () => {
+            setMostrarModalReinicio(true);
+          };
+
+          const confirmarReinicio = () => {
+            // Crear inicial limpio
+            const inicial = {};
+            nombresCompletos.forEach(nombre => {
+              inicial[nombre] = {
+                URA: 0, PEDIA: 0, TRAUMA: 0, PSIQUIA: 0, GINE: 0,
+                finDeSemana: 0, total: 0,
+                porDia: { Lunes: 0, Martes: 0, Miércoles: 0, Jueves: 0, Viernes: 0, Sábado: 0, Domingo: 0 }
+              };
+            });
+            
+            // Resetear estados
+            setContadoresTotales(inicial);
+            setGuardiasPorMes({});
+            setViernesEspeciales({});
+            
+            // Limpiar localStorage
+            localStorage.clear();
+            
+            setMostrarModalReinicio(false);
+          };
+
+          const cancelarReinicio = () => {
+            setMostrarModalReinicio(false);
+          };
+
+          // FUNCIÓN J* MEJORADA
+          const marcarJuevesFestivo = (dia) => {
+            const clave = `${añoActual}-${mesActual}-${dia}`;
+            const nuevosViernes = { ...viernesEspeciales };
+            
+            // Toggle del estado
+            const seEstaActivando = !nuevosViernes[clave];
+            if (nuevosViernes[clave]) {
+              delete nuevosViernes[clave];
+            } else {
+              nuevosViernes[clave] = true;
+            }
+            
+            setViernesEspeciales(nuevosViernes);
+            
+            // Recalcular contadores para guardias existentes en este día
+            const guardias = getGuardiasDelMes();
+            const guardiasDelDia = guardias[dia];
+            
+            if (guardiasDelDia) {
+              Object.entries(guardiasDelDia).forEach(([especialidad, residentes]) => {
+                residentes.forEach(residente => {
+                  // Ajustar contadores: mover de Jueves a Viernes o viceversa
+                  setContadoresTotales(prev => {
+                    const nuevos = { ...prev };
+                    if (nuevos[residente]) {
+                      if (seEstaActivando) {
+                        // Pasar de Jueves a Viernes
+                        nuevos[residente].porDia.Jueves -= 1;
+                        nuevos[residente].porDia.Viernes += 1;
+                        nuevos[residente].finDeSemana += 1;
+                      } else {
+                        // Pasar de Viernes a Jueves
+                        nuevos[residente].porDia.Viernes -= 1;
+                        nuevos[residente].porDia.Jueves += 1;
+                        nuevos[residente].finDeSemana -= 1;
+                      }
+                    }
+                    return nuevos;
+                  });
+                });
+              });
+            }
+          };
+
+          // Agregar guardia
+          const agregarGuardia = (dia, especialidad, nombreCompleto) => {
+            const keyMes = `${añoActual}-${mesActual}`;
+            
+            setGuardiasPorMes(prev => {
+              const nuevas = { ...prev };
+              if (!nuevas[keyMes]) nuevas[keyMes] = {};
+              if (!nuevas[keyMes][dia]) nuevas[keyMes][dia] = {};
+              if (!nuevas[keyMes][dia][especialidad]) nuevas[keyMes][dia][especialidad] = [];
+              
+              if (!nuevas[keyMes][dia][especialidad].includes(nombreCompleto)) {
+                nuevas[keyMes][dia][especialidad].push(nombreCompleto);
+                actualizarContadores(nombreCompleto, especialidad, dia, 'agregar');
+              }
+              
+              return nuevas;
+            });
+          };
+
+          // Quitar guardia
+          const quitarGuardia = (dia, especialidad, nombreCompleto) => {
+            const keyMes = `${añoActual}-${mesActual}`;
+            
+            setGuardiasPorMes(prev => {
+              const nuevas = { ...prev };
+              if (nuevas[keyMes]?.[dia]?.[especialidad]) {
+                nuevas[keyMes][dia][especialidad] = nuevas[keyMes][dia][especialidad].filter(r => r !== nombreCompleto);
+                actualizarContadores(nombreCompleto, especialidad, dia, 'quitar');
+              }
+              return nuevas;
+            });
+          };
+
+          // Actualizar contadores totales
+          const actualizarContadores = (nombreCompleto, especialidad, dia, accion) => {
+            const incremento = accion === 'agregar' ? 1 : -1;
+            const diaSemanaIndex = getDiaDeLaSemana(dia, mesActual, añoActual);
+            let diaSemana = diaSemanaIndex === 0 ? 'Domingo' : dias[diaSemanaIndex - 1];
+            
+            // SI ES JUEVES FESTIVO, CONTAR COMO VIERNES
+            if (diaSemanaIndex === 4 && esViernesEspecial(dia, mesActual, añoActual)) {
+              diaSemana = 'Viernes';
+            }
+            
+            setContadoresTotales(prev => {
+              const nuevos = { ...prev };
+              if (nuevos[nombreCompleto]) {
+                nuevos[nombreCompleto][especialidad] += incremento;
+                nuevos[nombreCompleto].total += incremento;
+                nuevos[nombreCompleto].porDia[diaSemana] += incremento;
+                
+                // Para fin de semana: viernes, sábados, domingos Y jueves festivos
+                if (esFinDeSemana(dia, mesActual, añoActual) || (diaSemanaIndex === 4 && esViernesEspecial(dia, mesActual, añoActual))) {
+                  nuevos[nombreCompleto].finDeSemana += incremento;
+                }
+              }
+              return nuevos;
+            });
+          };
+
+          return React.createElement('div', {
+            className: "max-w-7xl mx-auto p-4 bg-gray-50 min-h-screen"
+          }, [
+            // Header
+            React.createElement('div', {
+              key: 'header',
+              className: "mb-6"
+            }, [
+              React.createElement('h1', {
+                key: 'title',
+                className: "text-3xl font-bold text-gray-800 mb-2"
+              }, "Sistema de Gestión de Guardias - Residentes R2"),
+              
+              React.createElement('p', {
+                key: 'subtitle',
+                className: "text-gray-600"
+              }, "Año 2025 - Gestión completa con contadores automáticos"),
+              
+              React.createElement('div', {
+                key: 'controls',
+                className: "flex items-center justify-between mt-4"
+              }, [
+                React.createElement('div', {
+                  key: 'left-controls',
+                  className: "flex items-center gap-4"
+                }, [
+                  React.createElement(Calendar, {
+                    key: 'calendar-icon',
+                    size: 20,
+                    className: "text-gray-500"
+                  }),
+                  React.createElement('select', {
+                    key: 'month-select',
+                    value: mesActual,
+                    onChange: (e) => setMesActual(parseInt(e.target.value)),
+                    className: "border rounded px-3 py-2 font-medium"
+                  }, meses.map((mes, index) => 
+                    React.createElement('option', {
+                      key: index,
+                      value: index
+                    }, `${mes} 2025`)
+                  ))
+                ]),
+                
+                React.createElement('button', {
+                  key: 'reset-button',
+                  onClick: abrirModalReinicio,
+                  className: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex items-center gap-2"
+                }, [
+                  React.createElement(RotateCcw, {
+                    key: 'reset-icon',
+                    size: 16
+                  }),
+                  "Reiniciar Todo"
+                ])
+              ]),
+              
+              // Leyenda
+              React.createElement('div', {
+                key: 'legend',
+                className: "flex flex-wrap gap-4 mt-4 p-3 bg-white rounded-lg shadow-sm"
+              }, [
+                ...Object.entries(especialidades).map(([esp, info]) => 
+                  React.createElement('div', {
+                    key: esp,
+                    className: "flex items-center gap-2"
+                  }, [
+                    React.createElement('div', {
+                      key: `color-${esp}`,
+                      className: `w-4 h-4 rounded ${info.color}`
+                    }),
+                    React.createElement('span', {
+                      key: `text-${esp}`,
+                      className: "text-sm font-medium"
+                    }, `${esp}: ${info.nombre}`)
+                  ])
+                ),
+                React.createElement('div', {
+                  key: 'fds-legend',
+                  className: "flex items-center gap-2 ml-4"
+                }, [
+                  React.createElement('div', {
+                    key: 'fds-color',
+                    className: "w-4 h-4 bg-yellow-200 rounded"
+                  }),
+                  React.createElement('span', {
+                    key: 'fds-text',
+                    className: "text-sm"
+                  }, "FDS: Fin de semana")
+                ]),
+                React.createElement('div', {
+                  key: 'j-legend',
+                  className: "flex items-center gap-2"
+                }, [
+                  React.createElement('div', {
+                    key: 'j-color',
+                    className: "w-4 h-4 bg-orange-200 rounded"
+                  }),
+                  React.createElement('span', {
+                    key: 'j-text',
+                    className: "text-sm"
+                  }, "J*: Click para marcar jueves como prefestivo (contará como VIERNES)")
+                ])
+              ]),
+              
+              // Panel de info
+              React.createElement('div', {
+                key: 'info-panel',
+                className: "mt-4 p-3 bg-green-50 rounded-lg"
+              }, [
+                React.createElement('h4', {
+                  key: 'info-title',
+                  className: "font-bold text-sm mb-2"
+                }, "📊 Estado Actual:"),
+                
+                React.createElement('div', {
+                  key: 'info-content',
+                  className: "text-xs space-y-1"
+                }, [
+                  React.createElement('div', {
+                    key: 'mes-info'
+                  }, `📅 Mes: ${meses[mesActual]} 2025`),
+                  React.createElement('div', {
+                    key: 'festivos-info'
+                  }, `⭐ Jueves prefestivos: ${Object.keys(viernesEspeciales).filter(key => key.startsWith(`${añoActual}-${mesActual}-`)).length}`),
+                  React.createElement('div', {
+                    key: 'total-info'
+                  }, `🏥 Total guardias del año: ${Object.values(contadoresTotales).reduce((sum, contador) => sum + contador.total, 0)}`)
+                ]),
+                
+                React.createElement('div', {
+                  key: 'instructions',
+                  className: "mt-3 space-y-1"
+                }, [
+                  React.createElement('div', {
+                    key: 'important',
+                    className: "text-xs"
+                  }, "⚠️ IMPORTANTE: Los jueves marcados como PREFESTIVO cuentan como VIERNES en los contadores"),
+                  React.createElement('div', {
+                    key: 'reset-info',
+                    className: "text-xs"
+                  }, "• \"Reiniciar Todo\" borra TODO completamente (con confirmación)")
+                ])
+              ])
+            ]),
+
+            // Panel de Asignación
+            React.createElement('div', {
+              key: 'assignment-panel',
+              className: "bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200"
+            }, [
+              React.createElement('h3', {
+                key: 'assignment-title',
+                className: "text-xl font-bold mb-4 flex items-center gap-2 text-gray-800"
+              }, [
+                React.createElement(Plus, {
+                  key: 'plus-icon',
+                  className: "text-blue-500",
+                  size: 24
+                }),
+                `Asignar Guardia - ${meses[mesActual]} 2025`
+              ]),
+              
+              React.createElement('div', {
+                key: 'assignment-grid',
+                className: "grid grid-cols-2 md:grid-cols-4 gap-4"
+              }, [
+                React.createElement('div', {
+                  key: 'day-select'
+                }, [
+                  React.createElement('label', {
+                    key: 'day-label',
+                    className: "block text-sm font-bold mb-2 text-gray-700"
+                  }, "Día"),
+                  React.createElement('select', {
+                    key: 'day-dropdown',
+                    value: diaSeleccionado,
+                    onChange: (e) => setDiaSeleccionado(parseInt(e.target.value)),
+                    className: "w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  }, Array.from({ length: getDiasDelMes(mesActual, añoActual) }, (_, i) => i + 1).map(dia => 
+                    React.createElement('option', {
+                      key: dia,
+                      value: dia
+                    }, `${dia} - ${dias[getDiaDeLaSemana(dia, mesActual, añoActual) === 0 ? 6 : getDiaDeLaSemana(dia, mesActual, añoActual) - 1]}`)
+                  ))
+                ]),
+                
+                React.createElement('div', {
+                  key: 'specialty-select'
+                }, [
+                  React.createElement('label', {
+                    key: 'specialty-label',
+                    className: "block text-sm font-bold mb-2 text-gray-700"
+                  }, "Especialidad"),
+                  React.createElement('select', {
+                    key: 'specialty-dropdown',
+                    value: especialidadSeleccionada,
+                    onChange: (e) => setEspecialidadSeleccionada(e.target.value),
+                    className: "w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  }, Object.entries(especialidades).map(([esp, info]) => 
+                    React.createElement('option', {
+                      key: esp,
+                      value: esp
+                    }, `${esp} - ${info.nombre}`)
+                  ))
+                ]),
+                
+                React.createElement('div', {
+                  key: 'resident-select'
+                }, [
+                  React.createElement('label', {
+                    key: 'resident-label',
+                    className: "block text-sm font-bold mb-2 text-gray-700"
+                  }, "Residente"),
+                  React.createElement('select', {
+                    key: 'resident-dropdown',
+                    value: residenteSeleccionado,
+                    onChange: (e) => setResidenteSeleccionado(e.target.value),
+                    className: "w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none"
+                  }, nombresCompletos.map(nombre => 
+                    React.createElement('option', {
+                      key: nombre,
+                      value: nombre
+                    }, `${residentes[nombre]} - ${nombre}`)
+                  ))
+                ]),
+                
+                React.createElement('div', {
+                  key: 'assign-button-container',
+                  className: "flex items-end"
+                }, [
+                  React.createElement('button', {
+                    key: 'assign-button',
+                    onClick: () => agregarGuardia(diaSeleccionado, especialidadSeleccionada, residenteSeleccionado),
+                    className: "bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2 font-bold shadow-md hover:shadow-lg transition-all"
+                  }, [
+                    React.createElement(Plus, {
+                      key: 'assign-plus-icon',
+                      size: 18
+                    }),
+                    "Asignar"
+                  ])
+                ])
+              ])
+            ]),
+
+            // Calendario
+            React.createElement('div', {
+              key: 'calendar',
+              className: "bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200"
+            }, [
+              React.createElement('h2', {
+                key: 'calendar-title',
+                className: "text-2xl font-bold mb-6 flex items-center justify-between text-gray-800"
+              }, [
+                React.createElement('span', {
+                  key: 'calendar-title-text'
+                }, `📅 Calendario - ${meses[mesActual]} 2025`),
+                React.createElement('div', {
+                  key: 'calendar-help',
+                  className: "text-sm text-gray-500 flex items-center gap-2"
+                }, [
+                  React.createElement(AlertCircle, {
+                    key: 'help-icon',
+                    size: 16
+                  }),
+                  "Click en \"J*\" para marcar jueves prefestivos"
+                ])
+              ]),
+              
+              React.createElement('div', {
+                key: 'calendar-grid',
+                className: "grid grid-cols-7 gap-3"
+              }, [
+                // Headers de días
+                ...dias.map(dia => 
+                  React.createElement('div', {
+                    key: `header-${dia}`,
+                    className: "text-center font-bold p-3 bg-gradient-to-b from-gray-100 to-gray-200 rounded-lg border border-gray-300 shadow-sm"
+                  }, React.createElement('span', {
+                    className: "text-gray-700"
+                  }, dia))
+                ),
+                
+                // Días del calendario
+                ...(() => {
+                  const diasDelMes = getDiasDelMes(mesActual, añoActual);
+                  const primerDia = getDiaDeLaSemana(1, mesActual, añoActual);
+                  const diasArray = [];
+                  const guardias = getGuardiasDelMes();
+
+                  // Días vacíos al inicio
+                  for (let i = 0; i < (primerDia === 0 ? 6 : primerDia - 1); i++) {
+                    diasArray.push(null);
+                  }
+
+                  // Días del mes
+                  for (let dia = 1; dia <= diasDelMes; dia++) {
+                    diasArray.push(dia);
+                  }
+
+                  return diasArray.map((dia, index) => 
+                    React.createElement('div', {
+                      key: `day-${index}`,
+                      className: "min-h-48 border-2 border-gray-300 rounded-lg p-3 bg-gradient-to-b from-white to-gray-50 shadow-sm hover:shadow-md transition-shadow"
+                    }, dia && [
+                      // Header del día
+                      React.createElement('div', {
+                        key: 'day-header',
+                        className: "font-bold text-lg mb-3 flex justify-between items-start"
+                      }, [
+                        React.createElement('div', {
+                          key: 'day-info',
+                          className: "flex flex-col"
+                        }, [
+                          React.createElement('span', {
+                            key: 'day-number',
+                            className: "text-gray-800"
+                          }, dia),
+                          React.createElement('span', {
+                            key: 'day-name',
+                            className: "text-xs text-gray-500 font-normal bg-gray-100 px-2 py-1 rounded"
+                          }, dias[getDiaDeLaSemana(dia, mesActual, añoActual) === 0 ? 6 : getDiaDeLaSemana(dia, mesActual, añoActual) - 1])
+                        ]),
+                        React.createElement('div', {
+                          key: 'day-badges',
+                          className: "flex flex-col items-end gap-1"
+                        }, [
+                          esFinDeSemana(dia, mesActual, añoActual) && React.createElement('span', {
+                            key: 'fds-badge',
+                            className: "text-xs bg-yellow-300 text-yellow-800 px-2 py-1 rounded-full font-bold shadow-sm"
+                          }, "FDS"),
+                          esViernesEspecial(dia, mesActual, añoActual) && React.createElement('span', {
+                            key: 'prefestivo-badge',
+                            className: "text-xs bg-red-600 text-white px-2 py-1 rounded-full font-bold shadow-md"
+                          }, "PREFESTIVO"),
+                          getDiaDeLaSemana(dia, mesActual, añoActual) === 4 && React.createElement('button', {
+                            key: 'j-button',
+                            onClick: () => marcarJuevesFestivo(dia),
+                            className: `text-xs px-3 py-2 rounded-full cursor-pointer font-bold border-2 transition-all hover:scale-105 shadow-md ${
+                              esViernesEspecial(dia, mesActual, añoActual) 
+                                ? 'bg-red-500 text-white border-red-600 hover:bg-red-600' 
+                                : 'bg-gray-400 text-white border-gray-500 hover:bg-gray-500'
+                            }`
+                          }, "J*")
+                        ])
+                      ]),
+                      
+                      // Especialidades
+                      React.createElement('div', {
+                        key: 'specialties',
+                        className: "space-y-2"
+                      }, Object.keys(especialidades).map(esp => {
+                        const guardiasDia = guardias[dia]?.[esp] || [];
+                        return React.createElement('div', {
+                          key: esp
+                        }, [
+                          React.createElement('div', {
+                            key: 'specialty-header',
+                            className: `text-xs px-2 py-1 rounded-md font-bold mb-1 shadow-sm border ${especialidades[esp].color}`
+                          }, esp),
+                          ...guardiasDia.map((nombreCompleto, idx) => 
+                            React.createElement('div', {
+                              key: idx,
+                              className: "bg-gray-100 px-2 py-1 rounded-md flex justify-between items-center text-xs shadow-sm border border-gray-200 hover:bg-gray-200 transition-colors"
+                            }, [
+                              React.createElement('span', {
+                                key: 'resident-name',
+                                className: "font-medium text-gray-700"
+                              }, residentes[nombreCompleto]),
+                              React.createElement('button', {
+                                key: 'remove-button',
+                                onClick: () => quitarGuardia(dia, esp, nombreCompleto),
+                                className: "text-red-500 hover:text-red-700 hover:bg-red-100 rounded-full p-1 transition-all"
+                              }, React.createElement(Minus, {
+                                size: 12
+                              }))
+                            ])
+                          )
+                        ]);
+                      }))
+                    ])
+                  );
+                })()
+              ])
+            ]),
+
+            // Totales
+            React.createElement('div', {
+              key: 'totals',
+              className: "bg-white rounded-lg shadow-lg p-6 border border-gray-200"
+            }, [
+              React.createElement('h2', {
+                key: 'totals-title',
+                className: "text-2xl font-bold mb-6 text-gray-800"
+              }, "🏆 Contadores Totales - Año 2025"),
+              
+              React.createElement('div', {
+                key: 'totals-grid',
+                className: "grid md:grid-cols-2 gap-6"
+              }, [
+                // Por especialidad
+                React.createElement('div', {
+                  key: 'specialty-totals'
+                }, [
+                  React.createElement('h3', {
+                    key: 'specialty-title',
+                    className: "text-lg font-semibold mb-3"
+                  }, "Por Especialidad"),
+                  React.createElement('div', {
+                    key: 'specialty-table-container',
+                    className: "overflow-x-auto"
+                  }, [
+                    React.createElement('table', {
+                      key: 'specialty-table',
+                      className: "w-full text-sm border-collapse border border-gray-300"
+                    }, [
+                      React.createElement('thead', {
+                        key: 'specialty-thead'
+                      }, [
+                        React.createElement('tr', {
+                          key: 'specialty-header-row',
+                          className: "bg-gray-200"
+                        }, [
+                          React.createElement('th', {
+                            key: 'resident-header',
+                            className: "text-left p-3 border border-gray-300 font-bold"
+                          }, "Residente"),
+                          React.createElement('th', {
+                            key: 'ura-header',
+                            className: "text-center p-3 border border-gray-300 font-bold bg-purple-100"
+                          }, "URA"),
+                          React.createElement('th', {
+                            key: 'ped-header',
+                            className: "text-center p-3 border border-gray-300 font-bold bg-red-100"
+                          }, "PED"),
+                          React.createElement('th', {
+                            key: 'tra-header',
+                            className: "text-center p-3 border border-gray-300 font-bold bg-orange-100"
+                          }, "TRA"),
+                          React.createElement('th', {
+                            key: 'psi-header',
+                            className: "text-center p-3 border border-gray-300 font-bold bg-blue-100"
+                          }, "PSI"),
+                          React.createElement('th', {
+                            key: 'gin-header',
+                            className: "text-center p-3 border border-gray-300 font-bold bg-pink-100"
+                          }, "GIN"),
+                          React.createElement('th', {
+                            key: 'total-header',
+                            className: "text-center p-3 border border-gray-300 font-bold bg-blue-200 text-blue-800"
+                          }, "TOTAL"),
+                          React.createElement('th', {
+                            key: 'weekend-header',
+                            className: "text-center p-3 border border-gray-300 font-bold bg-yellow-200 text-yellow-800"
+                          }, "DE FINDE")
+                        ])
+                      ]),
+                      React.createElement('tbody', {
+                        key: 'specialty-tbody'
+                      }, nombresCompletos.map(nombre => 
+                        React.createElement('tr', {
+                          key: nombre,
+                          className: "hover:bg-gray-50"
+                        }, [
+                          React.createElement('td', {
+                            key: 'name-cell',
+                            className: "p-3 font-bold border border-gray-300 bg-gray-50"
+                          }, residentes[nombre]),
+                          React.createElement('td', {
+                            key: 'ura-cell',
+                            className: "text-center p-3 border border-gray-300 font-semibold"
+                          }, contadoresTotales[nombre].URA),
+                          React.createElement('td', {
+                            key: 'ped-cell',
+                            className: "text-center p-3 border border-gray-300 font-semibold"
+                          }, contadoresTotales[nombre].PEDIA),
+                          React.createElement('td', {
+                            key: 'tra-cell',
+                            className: "text-center p-3 border border-gray-300 font-semibold"
+                          }, contadoresTotales[nombre].TRAUMA),
+                          React.createElement('td', {
+                            key: 'psi-cell',
+                            className: "text-center p-3 border border-gray-300 font-semibold"
+                          }, contadoresTotales[nombre].PSIQUIA),
+                          React.createElement('td', {
+                            key: 'gin-cell',
+                            className: "text-center p-3 border border-gray-300 font-semibold"
+                          }, contadoresTotales[nombre].GINE),
+                          React.createElement('td', {
+                            key: 'total-cell',
+                            className: "text-center p-3 border border-gray-300 font-bold text-xl bg-blue-100 text-blue-800"
+                          }, contadoresTotales[nombre].total),
+                          React.createElement('td', {
+                            key: 'weekend-cell',
+                            className: "text-center p-3 border border-gray-300 font-bold text-xl bg-yellow-100 text-yellow-800"
+                          }, contadoresTotales[nombre].finDeSemana)
+                        ])
+                      ))
+                    ])
+                  ])
+                ]),
+                
+                // Por día
+                React.createElement('div', {
+                  key: 'day-totals'
+                }, [
+                  React.createElement('h3', {
+                    key: 'day-title',
+                    className: "text-lg font-semibold mb-3"
+                  }, "Por Día de la Semana"),
+                  React.createElement('div', {
+                    key: 'day-table-container',
+                    className: "overflow-x-auto"
+                  }, [
+                    React.createElement('table', {
+                      key: 'day-table',
+                      className: "w-full text-sm border-collapse border border-gray-300"
+                    }, [
+                      React.createElement('thead', {
+                        key: 'day-thead'
+                      }, [
+                        React.createElement('tr', {
+                          key: 'day-header-row',
+                          className: "bg-gray-200"
+                        }, [
+                          React.createElement('th', {
+                            key: 'resident-header-day',
+                            className: "text-left p-3 border border-gray-300 font-bold"
+                          }, "Residente"),
+                          ...dias.map(dia => 
+                            React.createElement('th', {
+                              key: `${dia}-header`,
+                              className: `text-center p-3 border border-gray-300 font-bold ${
+                                ['Viernes', 'Sábado', 'Domingo'].includes(dia) 
+                                  ? 'bg-yellow-100 text-yellow-800' 
+                                  : 'bg-blue-50'
+                              }`
+                            }, dia.slice(0, 3))
+                          )
+                        ])
+                      ]),
+                      React.createElement('tbody', {
+                        key: 'day-tbody'
+                      }, nombresCompletos.map(nombre => 
+                        React.createElement('tr', {
+                          key: nombre,
+                          className: "hover:bg-gray-50"
+                        }, [
+                          React.createElement('td', {
+                            key: 'name-cell-day',
+                            className: "p-3 font-bold border border-gray-300 bg-gray-50"
+                          }, residentes[nombre]),
+                          ...dias.map(dia => 
+                            React.createElement('td', {
+                              key: `${nombre}-${dia}`,
+                              className: `text-center p-3 border border-gray-300 ${
+                                ['Viernes', 'Sábado', 'Domingo'].includes(dia)
+                                  ? 'font-bold text-lg bg-yellow-50 text-yellow-800'
+                                  : 'font-semibold'
+                              }`
+                            }, contadoresTotales[nombre].porDia[dia])
+                          )
+                        ])
+                      ))
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+
+            // Modal de confirmación
+            mostrarModalReinicio && React.createElement('div', {
+              key: 'modal',
+              className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            }, [
+              React.createElement('div', {
+                key: 'modal-content',
+                className: "bg-white rounded-lg p-6 max-w-md mx-4 shadow-2xl"
+              }, [
+                React.createElement('h3', {
+                  key: 'modal-title',
+                  className: "text-xl font-bold text-gray-800 mb-4"
+                }, "⚠️ Confirmar Reinicio"),
+                React.createElement('p', {
+                  key: 'modal-text',
+                  className: "text-gray-600 mb-6"
+                }, [
+                  "¿Estás seguro de que quieres reiniciar todos los datos?",
+                  React.createElement('br', { key: 'br' }),
+                  React.createElement('strong', {
+                    key: 'warning'
+                  }, "Esta acción no se puede deshacer.")
+                ]),
+                React.createElement('div', {
+                  key: 'modal-buttons',
+                  className: "flex gap-3 justify-end"
+                }, [
+                  React.createElement('button', {
+                    key: 'cancel-button',
+                    onClick: cancelarReinicio,
+                    className: "bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  }, "Cancelar"),
+                  React.createElement('button', {
+                    key: 'confirm-button',
+                    onClick: confirmarReinicio,
+                    className: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-bold"
+                  }, "SÍ, Reiniciar Todo")
+                ])
+              ])
+            ])
+          ]);
+        };
+
+        // Renderizar la aplicación
+        ReactDOM.render(React.createElement(GuardiasManager), document.getElementById('root'));
+    </script>
+</body>
+</html>
