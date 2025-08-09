@@ -17,28 +17,29 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 12px;
+            gap: 20px; /* Aumentado de 12px a 20px */
+            max-width: none; /* Permite que se expanda más */
         }
         
         .calendar-day {
-            min-height: 240px;
+            min-height: 320px; /* Aumentado de 240px a 320px */
             border: 2px solid #d1d5db;
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 16px; /* Aumentado de 12px a 16px */
+            padding: 20px; /* Aumentado de 16px a 20px */
             background: linear-gradient(to bottom, white, #f9fafb);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Sombra más prominente */
             transition: all 0.2s ease;
         }
         
         .calendar-day:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12); /* Sombra más grande al hover */
+            transform: translateY(-3px); /* Más elevación */
         }
         
         .day-header {
             font-weight: bold;
-            font-size: 20px;
-            margin-bottom: 16px;
+            font-size: 22px; /* Aumentado de 20px */
+            margin-bottom: 20px; /* Aumentado de 16px */
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -51,18 +52,18 @@
         
         .day-number {
             color: #374151;
-            font-size: 24px;
+            font-size: 28px; /* Aumentado de 24px */
             font-weight: 800;
         }
         
         .day-name {
-            font-size: 12px;
+            font-size: 14px; /* Aumentado de 12px */
             color: #6b7280;
             font-weight: 600;
             background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-            padding: 6px 12px;
-            border-radius: 6px;
-            margin-top: 4px;
+            padding: 8px 14px; /* Aumentado padding */
+            border-radius: 8px; /* Aumentado de 6px */
+            margin-top: 6px; /* Aumentado de 4px */
             text-align: center;
             border: 1px solid #d1d5db;
         }
@@ -71,33 +72,33 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 6px;
+            gap: 8px; /* Aumentado de 6px */
         }
         
         .badge-fds {
-            font-size: 11px;
+            font-size: 12px; /* Aumentado de 11px */
             background: #fcd34d;
             color: #92400e;
-            padding: 6px 10px;
-            border-radius: 12px;
+            padding: 8px 12px; /* Aumentado padding */
+            border-radius: 14px; /* Aumentado de 12px */
             font-weight: bold;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .badge-prefestivo {
-            font-size: 11px;
+            font-size: 12px; /* Aumentado de 11px */
             background: #dc2626;
             color: white;
-            padding: 6px 10px;
-            border-radius: 12px;
+            padding: 8px 12px; /* Aumentado padding */
+            border-radius: 14px; /* Aumentado de 12px */
             font-weight: bold;
             box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
         }
         
         .j-button {
-            font-size: 11px;
-            padding: 8px 14px;
-            border-radius: 16px;
+            font-size: 12px; /* Aumentado de 11px */
+            padding: 10px 16px; /* Aumentado padding */
+            border-radius: 18px; /* Aumentado de 16px */
             cursor: pointer;
             font-weight: bold;
             border: 2px solid;
@@ -131,15 +132,15 @@
         }
         
         .specialty-section {
-            margin-bottom: 12px;
+            margin-bottom: 14px; /* Aumentado de 12px */
         }
         
         .specialty-header {
-            font-size: 12px;
-            padding: 6px 12px;
-            border-radius: 8px;
+            font-size: 13px; /* Aumentado de 12px */
+            padding: 8px 14px; /* Aumentado padding */
+            border-radius: 10px; /* Aumentado de 8px */
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 8px; /* Aumentado de 6px */
             border: 1px solid rgba(0,0,0,0.1);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -147,14 +148,14 @@
         
         .guard-item {
             background: #f3f4f6;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 8px 14px; /* Aumentado padding */
+            border-radius: 10px; /* Aumentado de 8px */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
+            font-size: 13px; /* Aumentado de 12px */
             border: 1px solid #e5e7eb;
-            margin-bottom: 4px;
+            margin-bottom: 6px; /* Aumentado de 4px */
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
         }
@@ -174,12 +175,12 @@
             color: #ef4444;
             cursor: pointer;
             font-weight: bold;
-            padding: 4px 8px;
+            padding: 6px 10px; /* Aumentado padding */
             border-radius: 50%;
             transition: all 0.2s ease;
             background: none;
             border: none;
-            font-size: 14px;
+            font-size: 16px; /* Aumentado de 14px */
         }
         
         .remove-btn:hover {
@@ -361,6 +362,13 @@
             color: #374151;
         }
         
+        /* Contenedor principal más ancho */
+        #app {
+            max-width: 95vw; /* Aumentado para usar más ancho de pantalla */
+            margin: 0 auto;
+            padding: 24px; /* Aumentado padding */
+        }
+        
         /* Icons usando Unicode */
         .icon-calendar::before { content: "📅"; }
         .icon-plus::before { content: "➕"; }
@@ -370,10 +378,42 @@
         .icon-info::before { content: "ℹ️"; }
         .icon-hospital::before { content: "🏥"; }
         .icon-star::before { content: "⭐"; }
+        
+        /* Responsivo mejorado */
+        @media (max-width: 1200px) {
+            .calendar-day {
+                min-height: 280px;
+                padding: 16px;
+            }
+            
+            .day-number {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-grid {
+                gap: 12px;
+            }
+            
+            .calendar-day {
+                min-height: 240px;
+                padding: 12px;
+            }
+            
+            .day-number {
+                font-size: 20px;
+            }
+            
+            #app {
+                padding: 16px;
+                max-width: 100vw;
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="app" class="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div id="app" class="bg-gray-50 min-h-screen">
         <!-- La aplicación se cargará aquí -->
     </div>
 
