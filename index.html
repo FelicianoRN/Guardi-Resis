@@ -372,6 +372,33 @@
         .icon-info::before { content: "ℹ️"; }
         .icon-hospital::before { content: "🏥"; }
         .icon-star::before { content: "⭐"; }
+        .icon-download::before { content: "💾"; }
+        .icon-upload::before { content: "📁"; }
+        
+        /* File input styling */
+        .file-input {
+            display: none;
+        }
+        
+        .file-input-label {
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            background: #10b981;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .file-input-label:hover {
+            background: #059669;
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
         
         /* Sistema de notificaciones */
         .notification {
@@ -662,6 +689,77 @@
             }
         }
 
+        // Funciones para JSON Import/Export
+        function exportarJSON() {
+            try {
+                const datos = {
+                    guardiasPorMes: estado.guardiasPorMes,
+                    viernesEspeciales: estado.viernesEspeciales,
+                    contadoresTotales: estado.contadoresTotales,
+                    fechaExportacion: new Date().toISOString(),
+                    version: "1.0"
+                };
+                
+                const jsonString = JSON.stringify(datos, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backup-guardias-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                mostrarNotificacion('✅ Backup JSON creado correctamente!<br>Puedes compartir este archivo con tus compañeros', 'success');
+            } catch (error) {
+                mostrarNotificacion('❌ Error al exportar JSON: ' + error.message, 'error');
+            }
+        }
+
+        function importarJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                mostrarNotificacion('❌ Por favor selecciona un archivo JSON válido', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const datos = JSON.parse(e.target.result);
+                    
+                    // Validar estructura del JSON
+                    if (!datos.guardiasPorMes || !datos.viernesEspeciales || !datos.contadoresTotales) {
+                        throw new Error('El archivo JSON no tiene la estructura correcta');
+                    }
+                    
+                    // Confirmar importación
+                    if (confirm('¿Estás seguro de que quieres importar estos datos?\n\nEsto reemplazará todos los datos actuales.')) {
+                        estado.guardiasPorMes = datos.guardiasPorMes;
+                        estado.viernesEspeciales = datos.viernesEspeciales;
+                        estado.contadoresTotales = datos.contadoresTotales;
+                        
+                        guardarDatos();
+                        renderizar();
+                        
+                        const fechaExportacion = datos.fechaExportacion ? 
+                            new Date(datos.fechaExportacion).toLocaleDateString('es-ES') : 'desconocida';
+                        
+                        mostrarNotificacion(`✅ Datos importados correctamente!<br>Fecha del backup: ${fechaExportacion}`, 'success');
+                    }
+                } catch (error) {
+                    mostrarNotificacion('❌ Error al importar JSON: ' + error.message, 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+            // Limpiar el input para permitir cargar el mismo archivo otra vez
+            event.target.value = '';
+        }
+
         // Utilidades
         function getDiasDelMes(mes, año) {
             return new Date(año, mes + 1, 0).getDate();
@@ -806,52 +904,6 @@
         // Verificar si las librerías PDF están disponibles
         function verificarLibreriasPDF() {
             return typeof window.html2canvas !== 'undefined' && typeof window.jspdf !== 'undefined';
-        }
-
-        function generarHTMLConDatos() {
-            try {
-                const datos = {
-                    guardiasPorMes: estado.guardiasPorMes,
-                    viernesEspeciales: estado.viernesEspeciales,
-                    contadoresTotales: estado.contadoresTotales
-                };
-                
-                // Obtener el HTML actual completo
-                let htmlCompleto = document.documentElement.outerHTML;
-                
-                // Crear un HTML con datos pre-cargados
-                const htmlConDatos = htmlCompleto.replace(
-                    'cargarDatos();',
-                    `
-                    // DATOS PRE-CARGADOS
-                    const DATOS_PRECARGADOS = ${JSON.stringify(datos, null, 8)};
-                    
-                    // Cargar datos pre-cargados
-                    if (DATOS_PRECARGADOS && Object.keys(DATOS_PRECARGADOS.guardiasPorMes || {}).length > 0) {
-                        estado.guardiasPorMes = DATOS_PRECARGADOS.guardiasPorMes;
-                        estado.viernesEspeciales = DATOS_PRECARGADOS.viernesEspeciales;
-                        estado.contadoresTotales = DATOS_PRECARGADOS.contadoresTotales;
-                        console.log('✅ Datos pre-cargados aplicados correctamente');
-                    } else {
-                        cargarDatos();
-                    }
-                    `
-                );
-                
-                const blob = new Blob([htmlConDatos], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `sistema-guardias-COMPLETO-${new Date().toISOString().split('T')[0]}.html`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                mostrarNotificacion('✅ HTML completo con datos generado correctamente!<br>Este archivo contiene toda la aplicación + tus datos', 'success');
-            } catch (error) {
-                mostrarNotificacion('❌ Error al generar HTML: ' + error.message, 'error');
-            }
         }
 
         // Funciones para exportar PDF
@@ -1127,8 +1179,14 @@
                                 </div>
                                 
                                 <div class="flex items-center gap-3 flex-wrap">
-                                    <button onclick="generarHTMLConDatos()" class="btn" style="padding: 12px 20px; font-size: 15px; font-weight: 700; background: #10b981; color: white;">
-                                        🌐 HTML con Datos
+                                    <input type="file" id="importarArchivo" class="file-input" accept=".json" onchange="importarJSON(event)">
+                                    <label for="importarArchivo" class="file-input-label">
+                                        <span class="icon-upload"></span>
+                                        Importar JSON
+                                    </label>
+                                    <button onclick="exportarJSON()" class="btn" style="padding: 12px 20px; font-size: 15px; font-weight: 700; background: #059669; color: white;">
+                                        <span class="icon-download"></span>
+                                        Exportar JSON
                                     </button>
                                     <button onclick="exportarCalendarioPDF()" class="btn" style="padding: 12px 20px; font-size: 15px; font-weight: 700; background: #f59e0b; color: white;">
                                         📄 Calendario PDF
@@ -1144,7 +1202,7 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="card mb-6">
                         <div class="card-content">
                             <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🏥 Especialidades Médicas</h3>
@@ -1234,9 +1292,13 @@
                                                 Los jueves marcados como PREFESTIVO cuentan como VIERNES en los contadores
                                             </li>
                                             <li class="flex items-center gap-2">
-                                                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-                                                "HTML con Datos" crea un archivo HTML completo con los datos incluidos
+                                                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                                                "Exportar JSON" crea un backup que puedes compartir con compañeros
                                             </li>                                           
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-teal-500 rounded-full"></span>
+                                                "Importar JSON" carga datos desde un archivo (reemplaza datos actuales)
+                                            </li>
                                             <li class="flex items-center gap-2">
                                                 <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
                                                 "Calendario PDF" exporta solo el calendario del mes actual como PDF
@@ -1253,24 +1315,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="mt-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-400 rounded-xl shadow-md">
-                                <div class="flex items-start gap-4">
-                                    <span class="icon-info text-blue-500 text-2xl mt-1"></span>
-                                    <div>
-                                        <div class="font-bold text-gray-800 text-lg mb-3">💡 Sobre las funciones disponibles:</div>
-                                        <ul class="text-gray-700 space-y-2 list-disc list-inside">
-                                            <li><strong>"🌐 HTML con Datos"</strong>: Genera un archivo HTML completo con toda la aplicación y datos incluidos</li>
-                                            <li><strong>"📄 Calendario PDF"</strong>: Exporta solo el calendario del mes actual</li>
-                                            <li><strong>"📑 PDF Completo"</strong>: Exporta calendario + tablas de contadores (2 páginas)</li>
-                                            <li><strong>"🔄 Reiniciar Todo"</strong>: Borra todos los datos (requiere confirmación)</li>
-                                        </ul>
-                                        <div class="mt-3 p-3 bg-yellow-100 rounded-lg">
-                                            <span class="text-yellow-800 font-semibold">💡 Tip:</span>
-                                            <span class="text-yellow-700"> El archivo HTML generado funciona offline y mantiene todos los datos guardados.</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                                        
                             </div>
                         </div>
                     </div>
@@ -1548,7 +1593,8 @@
         window.asignarGuardia = asignarGuardia;
         window.marcarJuevesFestivo = marcarJuevesFestivo;
         window.quitarGuardia = quitarGuardia;
-        window.generarHTMLConDatos = generarHTMLConDatos;
+        window.exportarJSON = exportarJSON;
+        window.importarJSON = importarJSON;
         window.exportarCalendarioPDF = exportarCalendarioPDF;
         window.exportarTodoPDF = exportarTodoPDF;
         window.abrirModalReinicio = abrirModalReinicio;
