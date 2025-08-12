@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Guardias - Residentes R2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f9fafb;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 20px;
+            max-width: none;
+        }
+        
+        .calendar-day {
+            min-height: 320px;
+            border: 2px solid #d1d5db;
+            border-radius: 16px;
+            padding: 20px;
+            background: linear-gradient(to bottom, white, #f9fafb);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-3px);
+        }
+        
+        .day-header {
+            font-weight: bold;
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .day-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .day-number {
+            color: #374151;
+            font-size: 28px;
+            font-weight: 800;
+        }
+        
+        .day-name {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-top: 6px;
+            text-align: center;
+            border: 1px solid #d1d5db;
+        }
+        
+        .day-badges {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        
+        .badge-fds {
+            font-size: 12px;
+            background: #fcd34d;
+            color: #92400e;
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .badge-prefestivo {
+            font-size: 12px;
+            background: #dc2626;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+        }
+        
+        .j-button {
+            font-size: 12px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            border: 2px solid;
+            transition: all 0.2s ease;
+            background: none;
+            outline: none;
+        }
+        
+        .j-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .j-button.active {
+            background: #ef4444;
+            color: white;
+            border-color: #dc2626;
+        }
+        
+        .j-button.active:hover {
+            background: #dc2626;
+        }
+        
+        .j-button.inactive {
+            background: #9ca3af;
+            color: white;
+            border-color: #6b7280;
+        }
+        
+        .j-button.inactive:hover {
+            background: #6b7280;
+        }
+        
+        .specialty-section {
+            margin-bottom: 14px;
+        }
+        
+        .specialty-header {
+            font-size: 13px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .guard-item {
+            background: #f3f4f6;
+            padding: 8px 14px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .guard-item:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .guard-name {
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .remove-btn {
+            color: #ef4444;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 6px 10px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            background: none;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .remove-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            transform: scale(1.2);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            margin: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .custom-table {
+            width: 100%;
+            font-size: 14px;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .custom-table th {
+            background: #f8fafc;
+            font-weight: bold;
+            color: #374151;
+        }
+        
+        .custom-table tbody tr:hover {
+            background: #f9fafb;
+        }
+        
+        .resident-name {
+            text-align: left !important;
+            font-weight: bold;
+            background: #f9fafb !important;
+        }
+        
+        .total-cell {
+            background: #dbeafe !important;
+            color: #1e40af !important;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .weekend-cell {
+            background: #fef3c7 !important;
+            color: #92400e !important;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .specialty-ura { background: #f3e8ff !important; }
+        .specialty-pedia { background: #fee2e2 !important; }
+        .specialty-trauma { background: #fed7aa !important; }
+        .specialty-psiquia { background: #dbeafe !important; }
+        .specialty-gine { background: #fce7f3 !important; }
+        
+        .weekend-day { background: #fef3c7 !important; color: #92400e !important; }
+        .normal-day { background: #f0f9ff !important; }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .card-header {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .card-content {
+            padding: 24px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .form-select {
+            width: 100%;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            padding: 14px 16px;
+            transition: all 0.2s ease;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .form-select:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+        
+        #app {
+            max-width: 95vw;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        .icon-calendar::before { content: "📅"; }
+        .icon-plus::before { content: "➕"; }
+        .icon-refresh::before { content: "🔄"; }
+        .icon-trophy::before { content: "🏆"; }
+        .icon-warning::before { content: "⚠️"; }
+        .icon-info::before { content: "ℹ️"; }
+        .icon-hospital::before { content: "🏥"; }
+        .icon-star::before { content: "⭐"; }
+        .icon-download::before { content: "💾"; }
+        .icon-upload::before { content: "📁"; }
+        
+        /* File input styling */
+        .file-input {
+            display: none;
+        }
+        
+        .file-input-label {
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            background: #10b981;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .file-input-label:hover {
+            background: #059669;
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        /* Sistema de notificaciones */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 2000;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateX(450px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        
+        @media (max-width: 1200px) {
+            .calendar-day {
+                min-height: 280px;
+                padding: 16px;
+            }
+            
+            .day-number {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-grid {
+                gap: 12px;
+            }
+            
+            .calendar-day {
+                min-height: 240px;
+                padding: 12px;
+            }
+            
+            .day-number {
+                font-size: 20px;
+            }
+            
+            #app {
+                padding: 16px;
+                max-width: 100vw;
+            }
+            
+            /* Botones responsivos en móvil */
+            .flex-wrap > button {
+                font-size: 13px !important;
+                padding: 10px 16px !important;
+            }
+        }
+        
+        /* Estilos optimizados para impresión/PDF */
+        @media print {
+            body {
+                background: white !important;
+                font-size: 12px;
+            }
+            
+            #app {
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+            
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                page-break-inside: avoid;
+                margin-bottom: 20px !important;
+                background: white !important;
+            }
+            
+            .card-content {
+                padding: 15px !important;
+            }
+            
+            .calendar-grid {
+                gap: 8px !important;
+            }
+            
+            .calendar-day {
+                min-height: 180px !important;
+                padding: 8px !important;
+                box-shadow: none !important;
+                border: 1px solid #999 !important;
+                page-break-inside: avoid;
+            }
+            
+            .day-number {
+                font-size: 16px !important;
+            }
+            
+            .day-name {
+                font-size: 10px !important;
+                padding: 4px 8px !important;
+            }
+            
+            .specialty-header {
+                font-size: 10px !important;
+                padding: 4px 8px !important;
+            }
+            
+            .guard-item {
+                font-size: 10px !important;
+                padding: 4px 8px !important;
+                margin-bottom: 2px !important;
+            }
+            
+            /* Ocultar elementos no necesarios en impresión */
+            .btn, .flex-wrap, .modal {
+                display: none !important;
+            }
+            
+            /* Ocultar sección de asignación al imprimir */
+            .card:nth-child(2) {
+                display: none !important;
+            }
+            
+            /* Mejorar contraste para impresión */
+            .custom-table {
+                font-size: 10px !important;
+            }
+            
+            .custom-table th {
+                background: #f0f0f0 !important;
+                color: black !important;
+                padding: 8px !important;
+            }
+            
+            .custom-table td {
+                padding: 6px !important;
+            }
+            
+            .total-cell {
+                background: #e6f3ff !important;
+                color: black !important;
+                font-weight: bold !important;
+            }
+            
+            .weekend-cell {
+                background: #fff3cd !important;
+                color: black !important;
+                font-weight: bold !important;
+            }
+            
+            /* Títulos más pequeños para impresión */
+            h1 {
+                font-size: 24px !important;
+                margin-bottom: 10px !important;
+            }
+            
+            h2 {
+                font-size: 20px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            h3 {
+                font-size: 16px !important;
+                margin-bottom: 6px !important;
+            }
+            
+            /* Asegurar que las tablas se impriman en una página */
+            .table-container {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="bg-gray-50 min-h-screen">
+        <!-- La aplicación se cargará aquí -->
+    </div>
+
+    <script>
+        // Datos base
+        const residentes = {
+            'ÁLVARO PACHECO': 'PACHE',
+            'ANA MARTIN MUELA': 'ANEKA',
+            'BLANCA URBIZU': 'BLANCH',
+            'ELENA SACRISTAN': 'ELENA',
+            'ENRIQUE GALLEGO': 'KIKE',
+            'MARIA ALICIA POSSE': 'ALI',
+            'MARIA GOMEZ CAMPO': 'MARÍA',
+            'MARÍA GÓMEZ JORGE': 'MER',
+            'MARTA RUS': 'MARTA',
+            'NOELIA MEDINA': 'NOE',
+            'SARA MORALES': 'SARA',
+            'SONIA GONZALEZ': 'SONIA'
+        };
+
+        const nombresCompletos = Object.keys(residentes);
+
+        const especialidades = {
+            'URA': { nombre: 'Urgencias', color: 'bg-purple-300 text-purple-800' },
+            'PEDIA': { nombre: 'Pediatría', color: 'bg-red-300 text-red-800' },
+            'TRAUMA': { nombre: 'Traumatología', color: 'bg-orange-300 text-orange-800' },
+            'PSIQUIA': { nombre: 'Psiquiatría', color: 'bg-blue-300 text-blue-800' },
+            'GINE': { nombre: 'Ginecología', color: 'bg-pink-300 text-pink-800' }
+        };
+
+        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        // Estado de la aplicación
+        let estado = {
+            mesActual: 0,
+            añoActual: 2025,
+            diaSeleccionado: 1,
+            especialidadSeleccionada: 'URA',
+            residenteSeleccionado: nombresCompletos[0],
+            mostrarModalReinicio: false,
+            guardiasPorMes: {},
+            viernesEspeciales: {},
+            contadoresTotales: {}
+        };
+
+        // Inicializar contadores
+        function inicializarContadores() {
+            const inicial = {};
+            nombresCompletos.forEach(nombre => {
+                inicial[nombre] = {
+                    URA: 0, PEDIA: 0, TRAUMA: 0, PSIQUIA: 0, GINE: 0,
+                    finDeSemana: 0, total: 0,
+                    porDia: { Lunes: 0, Martes: 0, Miércoles: 0, Jueves: 0, Viernes: 0, Sábado: 0, Domingo: 0 }
+                };
+            });
+            return inicial;
+        }
+
+        // Cargar datos del localStorage
+        function cargarDatos() {
+            try {
+                if (typeof(Storage) !== "undefined" && localStorage) {
+                    const guardias = localStorage.getItem('guardias-por-mes-2025');
+                    const viernes = localStorage.getItem('viernes-especiales-2025');
+                    const contadores = localStorage.getItem('contadores-totales-2025');
+                    
+                    estado.guardiasPorMes = guardias ? JSON.parse(guardias) : {};
+                    estado.viernesEspeciales = viernes ? JSON.parse(viernes) : {};
+                    estado.contadoresTotales = contadores ? JSON.parse(contadores) : inicializarContadores();
+                } else {
+                    console.warn('localStorage no disponible, usando valores por defecto');
+                    estado.guardiasPorMes = {};
+                    estado.viernesEspeciales = {};
+                    estado.contadoresTotales = inicializarContadores();
+                }
+            } catch (e) {
+                console.warn('Error al cargar datos:', e);
+                estado.guardiasPorMes = {};
+                estado.viernesEspeciales = {};
+                estado.contadoresTotales = inicializarContadores();
+            }
+        }
+
+        // Guardar datos en localStorage
+        function guardarDatos() {
+            try {
+                if (typeof(Storage) !== "undefined" && localStorage) {
+                    localStorage.setItem('guardias-por-mes-2025', JSON.stringify(estado.guardiasPorMes));
+                    localStorage.setItem('viernes-especiales-2025', JSON.stringify(estado.viernesEspeciales));
+                    localStorage.setItem('contadores-totales-2025', JSON.stringify(estado.contadoresTotales));
+                }
+            } catch (e) {
+                console.warn('Error al guardar datos:', e);
+            }
+        }
+
+        // Funciones para JSON Import/Export
+        function exportarJSON() {
+            try {
+                const datos = {
+                    guardiasPorMes: estado.guardiasPorMes,
+                    viernesEspeciales: estado.viernesEspeciales,
+                    contadoresTotales: estado.contadoresTotales,
+                    fechaExportacion: new Date().toISOString(),
+                    version: "1.0"
+                };
+                
+                const jsonString = JSON.stringify(datos, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backup-guardias-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                mostrarNotificacion('✅ Backup JSON creado correctamente!<br>Puedes compartir este archivo con tus compañeros', 'success');
+            } catch (error) {
+                mostrarNotificacion('❌ Error al exportar JSON: ' + error.message, 'error');
+            }
+        }
+
+        function importarJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                mostrarNotificacion('❌ Por favor selecciona un archivo JSON válido', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const datos = JSON.parse(e.target.result);
+                    
+                    // Validar estructura del JSON
+                    if (!datos.guardiasPorMes || !datos.viernesEspeciales || !datos.contadoresTotales) {
+                        throw new Error('El archivo JSON no tiene la estructura correcta');
+                    }
+                    
+                    // Confirmar importación
+                    if (confirm('¿Estás seguro de que quieres importar estos datos?\n\nEsto reemplazará todos los datos actuales.')) {
+                        estado.guardiasPorMes = datos.guardiasPorMes;
+                        estado.viernesEspeciales = datos.viernesEspeciales;
+                        estado.contadoresTotales = datos.contadoresTotales;
+                        
+                        guardarDatos();
+                        renderizar();
+                        
+                        const fechaExportacion = datos.fechaExportacion ? 
+                            new Date(datos.fechaExportacion).toLocaleDateString('es-ES') : 'desconocida';
+                        
+                        mostrarNotificacion(`✅ Datos importados correctamente!<br>Fecha del backup: ${fechaExportacion}`, 'success');
+                    }
+                } catch (error) {
+                    mostrarNotificacion('❌ Error al importar JSON: ' + error.message, 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+            // Limpiar el input para permitir cargar el mismo archivo otra vez
+            event.target.value = '';
+        }
+
+        // Utilidades
+        function getDiasDelMes(mes, año) {
+            return new Date(año, mes + 1, 0).getDate();
+        }
+
+        function getDiaDeLaSemana(dia, mes, año) {
+            return new Date(año, mes, dia).getDay();
+        }
+
+        function esFinDeSemana(dia, mes, año) {
+            const diaSemana = getDiaDeLaSemana(dia, mes, año);
+            return diaSemana === 0 || diaSemana === 5 || diaSemana === 6;
+        }
+
+        function esViernesEspecial(dia, mes, año) {
+            const clave = `${año}-${mes}-${dia}`;
+            return estado.viernesEspeciales[clave] === true;
+        }
+
+        function getGuardiasDelMes() {
+            return estado.guardiasPorMes[`${estado.añoActual}-${estado.mesActual}`] || {};
+        }
+
+        // Funciones principales
+        function marcarJuevesFestivo(dia) {
+            const clave = `${estado.añoActual}-${estado.mesActual}-${dia}`;
+            
+            if (estado.viernesEspeciales[clave]) {
+                delete estado.viernesEspeciales[clave];
+            } else {
+                estado.viernesEspeciales[clave] = true;
+            }
+
+            // Recalcular contadores existentes
+            const guardias = getGuardiasDelMes();
+            const guardiasDelDia = guardias[dia];
+            
+            if (guardiasDelDia) {
+                Object.entries(guardiasDelDia).forEach(([especialidad, residentes]) => {
+                    residentes.forEach(residente => {
+                        const seEstaActivando = estado.viernesEspeciales[clave];
+                        if (seEstaActivando) {
+                            estado.contadoresTotales[residente].porDia.Jueves -= 1;
+                            estado.contadoresTotales[residente].porDia.Viernes += 1;
+                            estado.contadoresTotales[residente].finDeSemana += 1;
+                        } else {
+                            estado.contadoresTotales[residente].porDia.Viernes -= 1;
+                            estado.contadoresTotales[residente].porDia.Jueves += 1;
+                            estado.contadoresTotales[residente].finDeSemana -= 1;
+                        }
+                    });
+                });
+            }
+
+            guardarDatos();
+            renderizar();
+        }
+
+        function agregarGuardia(dia, especialidad, nombreCompleto) {
+            const keyMes = `${estado.añoActual}-${estado.mesActual}`;
+            
+            if (!estado.guardiasPorMes[keyMes]) estado.guardiasPorMes[keyMes] = {};
+            if (!estado.guardiasPorMes[keyMes][dia]) estado.guardiasPorMes[keyMes][dia] = {};
+            if (!estado.guardiasPorMes[keyMes][dia][especialidad]) estado.guardiasPorMes[keyMes][dia][especialidad] = [];
+            
+            if (!estado.guardiasPorMes[keyMes][dia][especialidad].includes(nombreCompleto)) {
+                estado.guardiasPorMes[keyMes][dia][especialidad].push(nombreCompleto);
+                actualizarContadores(nombreCompleto, especialidad, dia, 'agregar');
+                guardarDatos();
+                renderizar();
+            }
+        }
+
+        function quitarGuardia(dia, especialidad, nombreCompleto) {
+            const keyMes = `${estado.añoActual}-${estado.mesActual}`;
+            
+            if (estado.guardiasPorMes[keyMes]?.[dia]?.[especialidad]) {
+                estado.guardiasPorMes[keyMes][dia][especialidad] = 
+                    estado.guardiasPorMes[keyMes][dia][especialidad].filter(r => r !== nombreCompleto);
+                actualizarContadores(nombreCompleto, especialidad, dia, 'quitar');
+                guardarDatos();
+                renderizar();
+            }
+        }
+
+        function actualizarContadores(nombreCompleto, especialidad, dia, accion) {
+            const incremento = accion === 'agregar' ? 1 : -1;
+            const diaSemanaIndex = getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual);
+            let diaSemana = diaSemanaIndex === 0 ? 'Domingo' : dias[diaSemanaIndex - 1];
+            
+            // Si es jueves festivo, contar como viernes
+            if (diaSemanaIndex === 4 && esViernesEspecial(dia, estado.mesActual, estado.añoActual)) {
+                diaSemana = 'Viernes';
+            }
+            
+            estado.contadoresTotales[nombreCompleto][especialidad] += incremento;
+            estado.contadoresTotales[nombreCompleto].total += incremento;
+            estado.contadoresTotales[nombreCompleto].porDia[diaSemana] += incremento;
+            
+            if (esFinDeSemana(dia, estado.mesActual, estado.añoActual) || 
+                (diaSemanaIndex === 4 && esViernesEspecial(dia, estado.mesActual, estado.añoActual))) {
+                estado.contadoresTotales[nombreCompleto].finDeSemana += incremento;
+            }
+        }
+
+        function reiniciarTodo() {
+            estado.contadoresTotales = inicializarContadores();
+            estado.guardiasPorMes = {};
+            estado.viernesEspeciales = {};
+            localStorage.clear();
+            estado.mostrarModalReinicio = false;
+            renderizar();
+            mostrarNotificacion('✅ Todos los datos han sido reiniciados', 'success');
+        }
+
+        // Sistema de notificaciones
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.className = `notification ${tipo}`;
+            notification.innerHTML = mensaje;
+            
+            // Agregar al DOM
+            document.body.appendChild(notification);
+            
+            // Mostrar con animación
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Ocultar después de 4 segundos
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Verificar si las librerías PDF están disponibles
+        function verificarLibreriasPDF() {
+            return typeof window.html2canvas !== 'undefined' && typeof window.jspdf !== 'undefined';
+        }
+
+        // Funciones para exportar PDF
+        async function exportarCalendarioPDF() {
+            try {
+                // Verificar librerías
+                if (!verificarLibreriasPDF()) {
+                    mostrarNotificacion('⚠️ Generando PDF con método alternativo...', 'warning');
+                    setTimeout(() => {
+                        window.print();
+                    }, 500);
+                    return;
+                }
+
+                // Mostrar mensaje de carga
+                const originalButton = event.target;
+                const originalText = originalButton.innerHTML;
+                originalButton.innerHTML = '⏳ Generando PDF...';
+                originalButton.disabled = true;
+
+                mostrarNotificacion('🔄 Generando PDF del calendario...', 'info');
+
+                // Obtener SOLO la grid del calendario
+                const calendarioElement = document.querySelector('.calendar-grid');
+                
+                // Configurar html2canvas para capturar todo el contenido
+                const canvas = await html2canvas(calendarioElement, {
+                    scale: 1.5,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    scrollX: 0,
+                    scrollY: 0,
+                    width: calendarioElement.scrollWidth,
+                    height: calendarioElement.scrollHeight
+                });
+
+                // Crear PDF en formato más grande para que quepa todo
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('l', 'mm', 'a2'); // A2 para más espacio
+                
+                // Calcular dimensiones para que quepa todo el calendario
+                const pageWidth = pdf.internal.pageSize.getWidth() - 20; // Margen de 10mm cada lado
+                const pageHeight = pdf.internal.pageSize.getHeight() - 50; // Margen para título
+                
+                const imgWidth = pageWidth;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Si la imagen es muy alta, ajustar al alto de página
+                let finalWidth = imgWidth;
+                let finalHeight = imgHeight;
+                
+                if (imgHeight > pageHeight) {
+                    finalHeight = pageHeight;
+                    finalWidth = (canvas.width * finalHeight) / canvas.height;
+                }
+                
+                // Agregar título
+                pdf.setFontSize(24);
+                pdf.setFont(undefined, 'bold');
+                pdf.text(`Calendario de Guardias - ${meses[estado.mesActual]} 2025`, 20, 30);
+                
+                // Centrar la imagen
+                const xPos = (pdf.internal.pageSize.getWidth() - finalWidth) / 2;
+                
+                // Agregar la imagen del calendario
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', xPos, 40, finalWidth, finalHeight);
+                
+                // Descargar
+                pdf.save(`calendario-guardias-${meses[estado.mesActual]}-2025.pdf`);
+                
+                // Restaurar botón
+                originalButton.innerHTML = originalText;
+                originalButton.disabled = false;
+                
+                mostrarNotificacion('✅ Calendario exportado como PDF correctamente!', 'success');
+                
+            } catch (error) {
+                console.error('Error al generar PDF:', error);
+                mostrarNotificacion('❌ Error al generar PDF. Usando método de impresión alternativo...', 'error');
+                
+                // Restaurar botón en caso de error
+                if (event.target) {
+                    event.target.innerHTML = '📄 Calendario PDF';
+                    event.target.disabled = false;
+                }
+                
+                setTimeout(() => {
+                    window.print();
+                }, 500);
+            }
+        }
+
+        async function exportarTodoPDF() {
+            try {
+                // Verificar librerías
+                if (!verificarLibreriasPDF()) {
+                    mostrarNotificacion('⚠️ Generando PDF con método alternativo...', 'warning');
+                    setTimeout(() => {
+                        window.print();
+                    }, 500);
+                    return;
+                }
+
+                // Mostrar mensaje de carga - manejar event.target correctamente
+                let originalButton = null;
+                let originalText = '';
+                
+                if (event && event.target) {
+                    originalButton = event.target;
+                    originalText = originalButton.innerHTML;
+                    originalButton.innerHTML = '⏳ Generando PDF completo...';
+                    originalButton.disabled = true;
+                }
+
+                mostrarNotificacion('🔄 Generando PDF completo...', 'info');
+
+                // Crear PDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('l', 'mm', 'a2'); // A2 para más espacio
+                
+                // Página 1: Calendario
+                const calendarioElement = document.querySelector('.calendar-grid');
+                const canvasCalendario = await html2canvas(calendarioElement, {
+                    scale: 1.5,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    scrollX: 0,
+                    scrollY: 0,
+                    width: calendarioElement.scrollWidth,
+                    height: calendarioElement.scrollHeight
+                });
+
+                // Título página 1
+                pdf.setFontSize(28);
+                pdf.setFont(undefined, 'bold');
+                pdf.text(`Calendario de Guardias - ${meses[estado.mesActual]} 2025`, 20, 30);
+                
+                // Calcular dimensiones para calendario
+                const pageWidth = pdf.internal.pageSize.getWidth() - 20;
+                const pageHeight = pdf.internal.pageSize.getHeight() - 50;
+                
+                let imgWidth1 = pageWidth;
+                let imgHeight1 = (canvasCalendario.height * imgWidth1) / canvasCalendario.width;
+                
+                if (imgHeight1 > pageHeight) {
+                    imgHeight1 = pageHeight;
+                    imgWidth1 = (canvasCalendario.width * imgHeight1) / canvasCalendario.height;
+                }
+                
+                const xPos1 = (pdf.internal.pageSize.getWidth() - imgWidth1) / 2;
+                pdf.addImage(canvasCalendario.toDataURL('image/png'), 'PNG', xPos1, 40, imgWidth1, imgHeight1);
+                
+                // Página 2: Contadores Totales
+                pdf.addPage('a3', 'l'); // A3 para las tablas
+                
+                // Buscar las tablas de contadores de forma más directa
+                const cards = document.querySelectorAll('.card');
+                const ultimaCard = cards[cards.length - 1]; // La última card es la de contadores
+                
+                // Buscar el div que contiene las dos tablas (grid con 2 columnas)
+                const tablesContainer = ultimaCard.querySelector('div[class*="grid"][class*="md:grid-cols-2"]');
+                
+                if (!tablesContainer) {
+                    throw new Error('No se encontraron las tablas de contadores');
+                }
+                
+                const canvasTotales = await html2canvas(tablesContainer, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    scrollX: 0,
+                    scrollY: 0
+                });
+
+                // Título página 2
+                pdf.setFontSize(28);
+                pdf.text('Contadores Totales - Año 2025', 20, 30);
+                
+                // Calcular dimensiones para tablas
+                const pageWidth2 = pdf.internal.pageSize.getWidth() - 40;
+                const pageHeight2 = pdf.internal.pageSize.getHeight() - 60;
+                
+                let imgWidth2 = pageWidth2;
+                let imgHeight2 = (canvasTotales.height * imgWidth2) / canvasTotales.width;
+                
+                if (imgHeight2 > pageHeight2) {
+                    imgHeight2 = pageHeight2;
+                    imgWidth2 = (canvasTotales.width * imgHeight2) / canvasTotales.height;
+                }
+                
+                const xPos2 = (pdf.internal.pageSize.getWidth() - imgWidth2) / 2;
+                pdf.addImage(canvasTotales.toDataURL('image/png'), 'PNG', xPos2, 40, imgWidth2, imgHeight2);
+                
+                // Agregar footer con fecha de generación
+                const totalPages = pdf.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFontSize(12);
+                    pdf.setFont(undefined, 'normal');
+                    pdf.text(`Generado el ${new Date().toLocaleDateString('es-ES')} - Página ${i} de ${totalPages}`, 20, pdf.internal.pageSize.height - 15);
+                }
+                
+                // Descargar
+                pdf.save(`sistema-guardias-completo-${meses[estado.mesActual]}-2025.pdf`);
+                
+                // Restaurar botón si existe
+                if (originalButton) {
+                    originalButton.innerHTML = originalText;
+                    originalButton.disabled = false;
+                }
+                
+                mostrarNotificacion('✅ PDF completo generado correctamente!<br>Incluye calendario y contadores totales.', 'success');
+                
+            } catch (error) {
+                console.error('Error al generar PDF completo:', error);
+                mostrarNotificacion('❌ Error al generar PDF completo: ' + error.message, 'error');
+                
+                // Restaurar botón en caso de error
+                if (event && event.target) {
+                    event.target.innerHTML = '📑 PDF Completo';
+                    event.target.disabled = false;
+                }
+                
+                setTimeout(() => {
+                    window.print();
+                }, 500);
+            }
+        }
+
+        // Funciones de renderizado
+        function renderizar() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                ${renderHeader()}
+                ${renderPanelAsignacion()}
+                ${renderCalendario()}
+                ${renderTotales()}
+                ${estado.mostrarModalReinicio ? renderModal() : ''}
+            `;
+        }
+
+        function renderHeader() {
+            const totalGuardias = Object.values(estado.contadoresTotales).reduce((sum, contador) => sum + contador.total, 0);
+            const juevesFestivos = Object.keys(estado.viernesEspeciales)
+                .filter(key => key.startsWith(`${estado.añoActual}-${estado.mesActual}-`)).length;
+
+            return `
+                <div class="mb-8">
+                    <div class="text-center mb-8">
+                        <h1 class="text-5xl font-bold text-gray-800 mb-3">
+                            Sistema de Gestión de Guardias
+                        </h1>
+                        <h2 class="text-3xl font-semibold text-blue-600 mb-2">Residentes R2</h2>
+                        <p class="text-gray-600 text-xl">Año 2025 - Gestión completa con contadores automáticos</p>
+                    </div>
+                    
+                    <div class="card mb-6">
+                        <div class="card-content">
+                            <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                                <div class="flex items-center gap-6">
+                                    <div class="flex items-center gap-4">
+                                        <span class="icon-calendar text-2xl text-blue-500"></span>
+                                        <span class="text-lg font-semibold text-gray-700">Seleccionar Mes</span>
+                                        <select onchange="cambiarMes(this.value)" class="form-select bg-white border-2 border-gray-300 text-lg font-semibold" style="width: 180px; padding: 10px 14px;">
+                                            ${meses.map((mes, index) => 
+                                                `<option value="${index}" ${index === estado.mesActual ? 'selected' : ''}>${mes} 2025</option>`
+                                            ).join('')}
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-3 flex-wrap">
+                                    <input type="file" id="importarArchivo" class="file-input" accept=".json" onchange="importarJSON(event)">
+                                    <label for="importarArchivo" class="file-input-label">
+                                        <span class="icon-upload"></span>
+                                        Importar JSON
+                                    </label>
+                                    <button onclick="exportarJSON()" class="btn" style="padding: 12px 20px; font-size: 15px; font-weight: 700; background: #059669; color: white;">
+                                        <span class="icon-download"></span>
+                                        Exportar JSON
+                                    </button>
+                                    <button onclick="exportarCalendarioPDF()" class="btn" style="padding: 12px 20px; font-size: 15px; font-weight: 700; background: #f59e0b; color: white;">
+                                        📄 Calendario PDF
+                                    </button>
+                                    <button onclick="exportarTodoPDF()" class="btn" style="padding: 12px 20px; font-size: 15px; font-weight: 700; background: #ec4899; color: white;">
+                                        📑 PDF Completo
+                                    </button>
+                                    <button onclick="abrirModalReinicio()" class="btn btn-danger" style="padding: 12px 20px; font-size: 15px; font-weight: 700;">
+                                        <span class="icon-refresh"></span>
+                                        Reiniciar Todo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-6">
+                        <div class="card-content">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🏥 Especialidades Médicas</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                ${Object.entries(especialidades).map(([esp, info]) => `
+                                    <div class="relative overflow-hidden rounded-xl border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                        <div class="${info.color} p-6 text-center">
+                                            <div class="text-2xl font-black mb-2">${esp}</div>
+                                            <div class="text-sm font-semibold opacity-90">${info.nombre}</div>
+                                        </div>
+                                        <div class="absolute top-0 right-0 w-6 h-6 bg-white bg-opacity-30 rounded-bl-lg"></div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-6">
+                        <div class="card-content">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">📋 Leyenda de Marcadores</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 p-6 rounded-xl border-2 border-yellow-300 shadow-lg">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <div class="w-6 h-6 bg-yellow-400 rounded-full shadow-md"></div>
+                                        <span class="text-lg font-bold text-yellow-800">FDS</span>
+                                    </div>
+                                    <div class="text-center mt-2 text-yellow-700 font-semibold">Fin de Semana</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-orange-100 to-orange-200 p-6 rounded-xl border-2 border-orange-300 shadow-lg">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <div class="w-6 h-6 bg-orange-400 rounded-full shadow-md"></div>
+                                        <span class="text-lg font-bold text-orange-800">J*</span>
+                                    </div>
+                                    <div class="text-center mt-2 text-orange-700 font-semibold">Jueves Prefestivo</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-red-100 to-red-200 p-6 rounded-xl border-2 border-red-300 shadow-lg">
+                                    <div class="flex items-center justify-center gap-3">
+                                        <div class="w-6 h-6 bg-red-500 rounded-full shadow-md"></div>
+                                        <span class="text-lg font-bold text-red-800">PREFESTIVO</span>
+                                    </div>
+                                    <div class="text-center mt-2 text-red-700 font-semibold">Cuenta como Viernes</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-content">
+                            <h4 class="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-3">
+                                <span class="icon-info text-blue-500"></span>
+                                Estado Actual del Sistema
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border-2 border-blue-200 shadow-lg">
+                                    <div class="text-center">
+                                        <span class="icon-calendar text-4xl text-blue-500 block mb-3"></span>
+                                        <div class="text-sm font-semibold text-blue-700 mb-1">Mes Seleccionado</div>
+                                        <div class="text-2xl font-bold text-blue-800">${meses[estado.mesActual]}</div>
+                                        <div class="text-lg font-semibold text-blue-600">2025</div>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border-2 border-orange-200 shadow-lg">
+                                    <div class="text-center">
+                                        <span class="icon-star text-4xl text-orange-500 block mb-3"></span>
+                                        <div class="text-sm font-semibold text-orange-700 mb-1">Jueves Prefestivos</div>
+                                        <div class="text-3xl font-bold text-orange-800">${juevesFestivos}</div>
+                                        <div class="text-sm text-orange-600">Este mes</div>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border-2 border-green-200 shadow-lg">
+                                    <div class="text-center">
+                                        <span class="icon-hospital text-4xl text-green-500 block mb-3"></span>
+                                        <div class="text-sm font-semibold text-green-700 mb-1">Total Guardias</div>
+                                        <div class="text-3xl font-bold text-green-800">${totalGuardias}</div>
+                                        <div class="text-sm text-green-600">Año completo</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 rounded-xl shadow-md">
+                                <div class="flex items-start gap-4">
+                                    <span class="icon-warning text-yellow-500 text-2xl mt-1"></span>
+                                    <div>
+                                        <div class="font-bold text-gray-800 text-lg mb-3">📌 Información Importante:</div>
+                                        <ul class="text-gray-700 space-y-2">
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                                                Los jueves marcados como PREFESTIVO cuentan como VIERNES en los contadores
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                                                "Exportar JSON" crea un backup que puedes compartir con compañeros
+                                            </li>                                           
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-teal-500 rounded-full"></span>
+                                                "Importar JSON" carga datos desde un archivo (reemplaza datos actuales)
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                                                "Calendario PDF" exporta solo el calendario del mes actual como PDF
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-pink-500 rounded-full"></span>
+                                                "PDF Completo" exporta calendario + contadores en un solo archivo PDF
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                                "Reiniciar Todo" borra TODOS los datos completamente (con confirmación)
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                                                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPanelAsignacion() {
+            return `
+                <div class="card mb-8">
+                    <div class="card-content">
+                        <div class="text-center mb-6">
+                            <h3 class="text-3xl font-bold text-gray-800 flex items-center justify-center gap-3 mb-2">
+                                <span class="icon-plus text-blue-500 text-3xl"></span>
+                                Asignar Guardia
+                            </h3>
+                            <p class="text-gray-600 text-lg">${meses[estado.mesActual]} 2025</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                                <div>
+                                    <label class="form-label text-blue-700">Día del Mes</label>
+                                    <select onchange="estado.diaSeleccionado = parseInt(this.value)" class="form-select bg-white border-blue-300 focus:border-blue-500">
+                                        ${Array.from({ length: getDiasDelMes(estado.mesActual, estado.añoActual) }, (_, i) => i + 1)
+                                            .map(dia => `
+                                                <option value="${dia}" ${dia === estado.diaSeleccionado ? 'selected' : ''}>
+                                                    ${dia} - ${dias[getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual) === 0 ? 6 : getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual) - 1]}
+                                                </option>
+                                            `).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label text-blue-700">Especialidad</label>
+                                    <select onchange="estado.especialidadSeleccionada = this.value" class="form-select bg-white border-blue-300 focus:border-blue-500">
+                                        ${Object.entries(especialidades).map(([esp, info]) => `
+                                            <option value="${esp}" ${esp === estado.especialidadSeleccionada ? 'selected' : ''}>
+                                                ${esp} - ${info.nombre}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label text-blue-700">Residente</label>
+                                    <select onchange="estado.residenteSeleccionado = this.value" class="form-select bg-white border-blue-300 focus:border-blue-500">
+                                        ${nombresCompletos.map(nombre => `
+                                            <option value="${nombre}" ${nombre === estado.residenteSeleccionado ? 'selected' : ''}>
+                                                ${residentes[nombre]} - ${nombre}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                                <div class="flex items-end">
+                                    <button onclick="asignarGuardia()" 
+                                            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3">
+                                        <span class="icon-plus text-xl"></span>
+                                        <span class="text-lg">Asignar Guardia</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCalendario() {
+            const diasDelMes = getDiasDelMes(estado.mesActual, estado.añoActual);
+            const primerDia = getDiaDeLaSemana(1, estado.mesActual, estado.añoActual);
+            const guardias = getGuardiasDelMes();
+            
+            let html = `
+                <div class="card mb-8">
+                    <div class="card-content">
+                        <h2 class="text-4xl font-bold mb-8 text-gray-800 text-center flex items-center justify-center gap-4">
+                            <span class="icon-calendar text-4xl text-blue-500"></span>
+                            Calendario - ${meses[estado.mesActual]} 2025
+                        </h2>
+                        
+                        <div class="calendar-grid">
+                            ${dias.map((dia, index) => `
+                                <div class="text-center font-bold p-4 rounded-xl shadow-md border-2 ${
+                                    ['Viernes', 'Sábado', 'Domingo'].includes(dia) 
+                                        ? 'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-300 text-yellow-800' 
+                                        : 'bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300 text-blue-800'
+                                }">
+                                    <span class="text-xl font-bold">${dia}</span>
+                                </div>
+                            `).join('')}
+            `;
+
+            // Días vacíos al inicio
+            for (let i = 0; i < (primerDia === 0 ? 6 : primerDia - 1); i++) {
+                html += '<div class="calendar-day"></div>';
+            }
+
+            // Días del mes
+            for (let dia = 1; dia <= diasDelMes; dia++) {
+                const diaSemanaIndex = getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual);
+                const diaSemana = dias[diaSemanaIndex === 0 ? 6 : diaSemanaIndex - 1];
+                const esJueves = diaSemanaIndex === 4;
+                const esFDS = esFinDeSemana(dia, estado.mesActual, estado.añoActual);
+                const esPrefestivo = esViernesEspecial(dia, estado.mesActual, estado.añoActual);
+
+                html += `
+                    <div class="calendar-day">
+                        <div class="day-header">
+                            <div class="day-info">
+                                <span class="day-number">${dia}</span>
+                                <span class="day-name">${diaSemana}</span>
+                            </div>
+                            <div class="day-badges">
+                                ${esFDS ? '<span class="badge-fds">FDS</span>' : ''}
+                                ${esPrefestivo ? '<span class="badge-prefestivo">PREFESTIVO</span>' : ''}
+                                ${esJueves ? `
+                                    <button onclick="marcarJuevesFestivo(${dia})" 
+                                            class="j-button ${esPrefestivo ? 'active' : 'inactive'}">
+                                        J*
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <div style="space-y: 12px;">
+                            ${Object.keys(especialidades).map(esp => {
+                                const guardiasDia = guardias[dia]?.[esp] || [];
+                                return `
+                                    <div class="specialty-section">
+                                        <div class="specialty-header ${especialidades[esp].color}">
+                                            ${esp}
+                                        </div>
+                                        ${guardiasDia.map(nombreCompleto => `
+                                            <div class="guard-item">
+                                                <span class="guard-name">${residentes[nombreCompleto]}</span>
+                                                <button class="remove-btn" onclick="quitarGuardia(${dia}, '${esp}', '${nombreCompleto}')">✕</button>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += '</div></div></div>';
+            return html;
+        }
+
+        function renderTotales() {
+            return `
+                <div class="card">
+                    <div class="card-content">
+                        <h2 class="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                            <span class="icon-trophy text-3xl text-yellow-500"></span>
+                            Contadores Totales - Año 2025
+                        </h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-xl font-semibold mb-4">Por Especialidad</h3>
+                                <div class="table-container">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="resident-name">Residente</th>
+                                                <th class="specialty-ura">URA</th>
+                                                <th class="specialty-pedia">PED</th>
+                                                <th class="specialty-trauma">TRA</th>
+                                                <th class="specialty-psiquia">PSI</th>
+                                                <th class="specialty-gine">GIN</th>
+                                                <th class="total-cell">TOTAL</th>
+                                                <th class="weekend-cell">DE FINDE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${nombresCompletos.map(nombre => `
+                                                <tr>
+                                                    <td class="resident-name">${residentes[nombre]}</td>
+                                                    <td>${estado.contadoresTotales[nombre].URA}</td>
+                                                    <td>${estado.contadoresTotales[nombre].PEDIA}</td>
+                                                    <td>${estado.contadoresTotales[nombre].TRAUMA}</td>
+                                                    <td>${estado.contadoresTotales[nombre].PSIQUIA}</td>
+                                                    <td>${estado.contadoresTotales[nombre].GINE}</td>
+                                                    <td class="total-cell">${estado.contadoresTotales[nombre].total}</td>
+                                                    <td class="weekend-cell">${estado.contadoresTotales[nombre].finDeSemana}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold mb-4">Por Día de la Semana</h3>
+                                <div class="table-container">
+                                    <table class="custom-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="resident-name">Residente</th>
+                                                ${dias.map(dia => `
+                                                    <th class="${['Viernes', 'Sábado', 'Domingo'].includes(dia) ? 'weekend-day' : 'normal-day'}">
+                                                        ${dia.slice(0, 3)}
+                                                    </th>
+                                                `).join('')}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${nombresCompletos.map(nombre => `
+                                                <tr>
+                                                    <td class="resident-name">${residentes[nombre]}</td>
+                                                    ${dias.map(dia => `
+                                                        <td class="${['Viernes', 'Sábado', 'Domingo'].includes(dia) ? 'weekend-cell' : ''}">
+                                                            ${estado.contadoresTotales[nombre].porDia[dia]}
+                                                        </td>
+                                                    `).join('')}
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderModal() {
+            return `
+                <div class="modal">
+                    <div class="modal-content">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <span class="icon-warning text-red-500"></span>
+                            Confirmar Reinicio
+                        </h3>
+                        <p class="text-gray-600 mb-6">
+                            ¿Estás seguro de que quieres reiniciar todos los datos?<br>
+                            <strong>Esta acción no se puede deshacer.</strong>
+                        </p>
+                        <div class="flex gap-3 justify-end">
+                            <button onclick="cerrarModal()" class="btn btn-secondary">
+                                Cancelar
+                            </button>
+                            <button onclick="reiniciarTodo()" class="btn btn-danger">
+                                SÍ, Reiniciar Todo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Funciones globales para eventos
+        function cambiarMes(mes) {
+            estado.mesActual = parseInt(mes);
+            renderizar();
+        }
+
+        function asignarGuardia() {
+            agregarGuardia(estado.diaSeleccionado, estado.especialidadSeleccionada, estado.residenteSeleccionado);
+        }
+
+        function abrirModalReinicio() {
+            estado.mostrarModalReinicio = true;
+            renderizar();
+        }
+
+        function cerrarModal() {
+            estado.mostrarModalReinicio = false;
+            renderizar();
+        }
+
+        // Exponer funciones al scope global
+        window.cambiarMes = cambiarMes;
+        window.asignarGuardia = asignarGuardia;
+        window.marcarJuevesFestivo = marcarJuevesFestivo;
+        window.quitarGuardia = quitarGuardia;
+        window.exportarJSON = exportarJSON;
+        window.importarJSON = importarJSON;
+        window.exportarCalendarioPDF = exportarCalendarioPDF;
+        window.exportarTodoPDF = exportarTodoPDF;
+        window.abrirModalReinicio = abrirModalReinicio;
+        window.cerrarModal = cerrarModal;
+        window.reiniciarTodo = reiniciarTodo;
+        window.mostrarNotificacion = mostrarNotificacion;
+
+        // Inicializar la aplicación
+        cargarDatos();
+        renderizar();
+        
+        // Mostrar notificación de bienvenida después de un tiempo
+        setTimeout(() => {
+            mostrarNotificacion('🎉 Sistema de Gestión de Guardias listo para usar', 'success');
+        }, 1000);
+    </script>
+</body>
+</html>
