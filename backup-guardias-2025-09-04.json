@@ -1,0 +1,1053 @@
+{
+  "guardiasPorMes": {
+    "2025-5": {
+      "1": {
+        "PEDIA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "2": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "4": {
+        "URA": [
+          "ANA MARTIN MUELA",
+          "ELENA SACRISTAN",
+          "MARIA ALICIA POSSE",
+          "SARA MORALES"
+        ]
+      },
+      "6": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "7": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ],
+        "PEDIA": [
+          "MARIA GOMEZ CAMPO"
+        ],
+        "TRAUMA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "8": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "9": {
+        "URA": [
+          "ANA MARTIN MUELA",
+          "MARÍA GÓMEZ JORGE",
+          "SARA MORALES"
+        ]
+      },
+      "10": {
+        "URA": [
+          "ÁLVARO PACHECO",
+          "MARTA RUS"
+        ]
+      },
+      "12": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE",
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "13": {
+        "URA": [
+          "BLANCA URBIZU",
+          "NOELIA MEDINA",
+          "MARTA RUS"
+        ],
+        "TRAUMA": [
+          "SARA MORALES"
+        ]
+      },
+      "14": {
+        "PEDIA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "15": {
+        "URA": [
+          "MARTA RUS",
+          "NOELIA MEDINA"
+        ],
+        "TRAUMA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "16": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "17": {
+        "URA": [
+          "ANA MARTIN MUELA",
+          "MARIA ALICIA POSSE",
+          "MARÍA GÓMEZ JORGE",
+          "SARA MORALES"
+        ]
+      },
+      "18": {
+        "URA": [
+          "MARTA RUS",
+          "NOELIA MEDINA"
+        ]
+      },
+      "19": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "21": {
+        "URA": [
+          "BLANCA URBIZU"
+        ],
+        "PEDIA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "22": {
+        "URA": [
+          "MARIA ALICIA POSSE",
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "23": {
+        "URA": [
+          "ELENA SACRISTAN",
+          "ENRIQUE GALLEGO",
+          "SONIA GONZALEZ"
+        ]
+      },
+      "24": {
+        "URA": [
+          "ÁLVARO PACHECO",
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "25": {
+        "URA": [
+          "ANA MARTIN MUELA",
+          "BLANCA URBIZU",
+          "MARIA ALICIA POSSE",
+          "NOELIA MEDINA"
+        ],
+        "TRAUMA": [
+          "MARTA RUS"
+        ]
+      },
+      "27": {
+        "URA": [
+          "ENRIQUE GALLEGO",
+          "SONIA GONZALEZ"
+        ]
+      },
+      "28": {
+        "URA": [
+          "ÁLVARO PACHECO",
+          "ELENA SACRISTAN",
+          "MARÍA GÓMEZ JORGE",
+          "SARA MORALES"
+        ],
+        "PEDIA": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "29": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "30": {
+        "URA": [
+          "BLANCA URBIZU",
+          "MARIA GOMEZ CAMPO"
+        ],
+        "TRAUMA": [
+          "NOELIA MEDINA"
+        ]
+      }
+    },
+    "2025-6": {
+      "1": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "2": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "3": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ],
+        "TRAUMA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "4": {
+        "URA": [
+          "SARA MORALES"
+        ],
+        "PSIQUIA": [],
+        "PEDIA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "5": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ],
+        "PEDIA": [
+          "ELENA SACRISTAN"
+        ],
+        "TRAUMA": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "6": {
+        "URA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "7": {
+        "URA": [
+          "SARA MORALES"
+        ]
+      },
+      "8": {
+        "URA": [
+          "NOELIA MEDINA"
+        ],
+        "TRAUMA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "9": {
+        "URA": [
+          "MARTA RUS"
+        ]
+      },
+      "10": {
+        "URA": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "11": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ],
+        "PEDIA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "12": {
+        "URA": [
+          "SARA MORALES"
+        ],
+        "PEDIA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "13": {
+        "URA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "14": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ],
+        "GINE": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "15": {
+        "URA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "16": {
+        "URA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "18": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ],
+        "PEDIA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "19": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ],
+        "PEDIA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "20": {
+        "URA": [
+          "BLANCA URBIZU"
+        ],
+        "TRAUMA": [
+          "MARTA RUS"
+        ]
+      },
+      "21": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "22": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ],
+        "PSIQUIA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "23": {
+        "URA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "24": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "25": {
+        "URA": [
+          "ELENA SACRISTAN"
+        ],
+        "PEDIA": [
+          "MARIA ALICIA POSSE"
+        ],
+        "TRAUMA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "26": {
+        "URA": [
+          "MARTA RUS"
+        ],
+        "PEDIA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "27": {
+        "URA": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "28": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "29": {
+        "URA": [
+          "MARTA RUS"
+        ]
+      },
+      "30": {
+        "URA": [
+          "ELENA SACRISTAN"
+        ],
+        "TRAUMA": [
+          "SARA MORALES"
+        ]
+      },
+      "31": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ]
+      }
+    },
+    "2025-7": {
+      "1": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ],
+        "PEDIA": [
+          "MARTA RUS"
+        ]
+      },
+      "2": {
+        "PEDIA": [
+          "ÁLVARO PACHECO"
+        ],
+        "URA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "3": {
+        "URA": [
+          "ANA MARTIN MUELA"
+        ],
+        "TRAUMA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "4": {
+        "GINE": [
+          "BLANCA URBIZU"
+        ],
+        "URA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "5": {
+        "URA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "6": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ],
+        "TRAUMA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "7": {
+        "URA": [
+          "MARTA RUS"
+        ],
+        "PEDIA": [
+          "ANA MARTIN MUELA"
+        ],
+        "PSIQUIA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "8": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ],
+        "PEDIA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "9": {
+        "PEDIA": [
+          "MARÍA GÓMEZ JORGE"
+        ],
+        "URA": [
+          "BLANCA URBIZU"
+        ],
+        "TRAUMA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "10": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ],
+        "PSIQUIA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "11": {
+        "PSIQUIA": [
+          "ELENA SACRISTAN"
+        ],
+        "URA": [
+          "MARTA RUS"
+        ]
+      },
+      "12": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "13": {
+        "URA": [
+          "SARA MORALES"
+        ]
+      },
+      "14": {
+        "URA": [
+          "NOELIA MEDINA"
+        ],
+        "TRAUMA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "15": {
+        "TRAUMA": [
+          "MARTA RUS"
+        ],
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ],
+        "PEDIA": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "16": {
+        "PEDIA": [
+          "NOELIA MEDINA"
+        ],
+        "URA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "17": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "18": {
+        "URA": [
+          "MARIA ALICIA POSSE"
+        ],
+        "TRAUMA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "19": {
+        "TRAUMA": [
+          "SARA MORALES"
+        ],
+        "URA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "20": {
+        "URA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "21": {
+        "URA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "22": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ],
+        "PEDIA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "23": {
+        "URA": [
+          "MARIA ALICIA POSSE"
+        ],
+        "PEDIA": [
+          "SARA MORALES"
+        ]
+      },
+      "24": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "25": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "26": {
+        "URA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "27": {
+        "URA": [
+          "SARA MORALES"
+        ],
+        "GINE": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "28": {
+        "GINE": [
+          "MARTA RUS"
+        ],
+        "URA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "29": {
+        "URA": [
+          "ANA MARTIN MUELA"
+        ],
+        "PEDIA": [
+          "ELENA SACRISTAN"
+        ],
+        "TRAUMA": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "30": {
+        "PEDIA": [
+          "ÁLVARO PACHECO"
+        ],
+        "URA": [
+          "SARA MORALES"
+        ]
+      },
+      "31": {
+        "URA": [
+          "MARIA ALICIA POSSE"
+        ],
+        "TRAUMA": [
+          "ANA MARTIN MUELA"
+        ]
+      }
+    },
+    "2025-8": {
+      "2": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ],
+        "GINE": [
+          "MARIA GOMEZ CAMPO"
+        ],
+        "TRAUMA": [
+          "NOELIA MEDINA"
+        ],
+        "PSIQUIA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "3": {
+        "URA": [
+          "ANA MARTIN MUELA"
+        ]
+      },
+      "4": {
+        "URA": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "5": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ],
+        "PEDIA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "6": {
+        "PEDIA": [
+          "ENRIQUE GALLEGO"
+        ],
+        "URA": [
+          "SARA MORALES"
+        ]
+      },
+      "7": {
+        "URA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "8": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "9": {
+        "URA": [
+          "ANA MARTIN MUELA"
+        ],
+        "GINE": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "10": {
+        "URA": [
+          "ENRIQUE GALLEGO"
+        ]
+      },
+      "11": {
+        "URA": [
+          "SARA MORALES"
+        ],
+        "GINE": [
+          "BLANCA URBIZU"
+        ],
+        "PSIQUIA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "12": {
+        "URA": [
+          "MARTA RUS"
+        ],
+        "PEDIA": [
+          "MARIA ALICIA POSSE"
+        ],
+        "TRAUMA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "13": {
+        "PEDIA": [
+          "ANA MARTIN MUELA"
+        ],
+        "URA": [
+          "BLANCA URBIZU"
+        ]
+      },
+      "14": {
+        "URA": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "15": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ],
+        "TRAUMA": [
+          "SARA MORALES"
+        ]
+      },
+      "16": {
+        "URA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "17": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "18": {
+        "URA": [
+          "MARTA RUS"
+        ]
+      },
+      "19": {
+        "URA": [
+          "ANA MARTIN MUELA"
+        ],
+        "PEDIA": [
+          "SONIA GONZALEZ"
+        ],
+        "TRAUMA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "20": {
+        "TRAUMA": [
+          "MARIA GOMEZ CAMPO"
+        ],
+        "PEDIA": [
+          "NOELIA MEDINA"
+        ],
+        "URA": [
+          "SARA MORALES"
+        ]
+      },
+      "21": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "22": {
+        "URA": [
+          "MARTA RUS"
+        ],
+        "TRAUMA": [
+          "MARIA ALICIA POSSE"
+        ]
+      },
+      "23": {
+        "URA": [
+          "ELENA SACRISTAN"
+        ]
+      },
+      "24": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "25": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "26": {
+        "URA": [
+          "NOELIA MEDINA"
+        ]
+      },
+      "27": {
+        "URA": [
+          "SONIA GONZALEZ"
+        ],
+        "PEDIA": [
+          "MARTA RUS"
+        ],
+        "TRAUMA": [
+          "ÁLVARO PACHECO"
+        ]
+      },
+      "28": {
+        "URA": [
+          "MARIA GOMEZ CAMPO"
+        ]
+      },
+      "29": {
+        "URA": [
+          "MARÍA GÓMEZ JORGE"
+        ]
+      },
+      "30": {
+        "URA": [
+          "BLANCA URBIZU"
+        ],
+        "TRAUMA": [
+          "SONIA GONZALEZ"
+        ]
+      },
+      "31": {
+        "URA": [
+          "ÁLVARO PACHECO"
+        ]
+      }
+    }
+  },
+  "viernesEspeciales": {
+    "2025-6-24": true,
+    "2025-7-14": true
+  },
+  "contadoresTotales": {
+    "ÁLVARO PACHECO": {
+      "URA": 12,
+      "PEDIA": 4,
+      "TRAUMA": 2,
+      "PSIQUIA": 0,
+      "GINE": 0,
+      "finDeSemana": 9,
+      "total": 18,
+      "porDia": {
+        "Lunes": 1,
+        "Martes": 4,
+        "Miércoles": 3,
+        "Jueves": 1,
+        "Viernes": 3,
+        "Sábado": 6,
+        "Domingo": 0
+      }
+    },
+    "ANA MARTIN MUELA": {
+      "URA": 11,
+      "PEDIA": 3,
+      "TRAUMA": 3,
+      "PSIQUIA": 2,
+      "GINE": 0,
+      "finDeSemana": 9,
+      "total": 19,
+      "porDia": {
+        "Lunes": 1,
+        "Martes": 4,
+        "Miércoles": 4,
+        "Jueves": 1,
+        "Viernes": 3,
+        "Sábado": 2,
+        "Domingo": 4
+      }
+    },
+    "BLANCA URBIZU": {
+      "URA": 11,
+      "PEDIA": 2,
+      "TRAUMA": 2,
+      "PSIQUIA": 0,
+      "GINE": 2,
+      "finDeSemana": 10,
+      "total": 17,
+      "porDia": {
+        "Lunes": 2,
+        "Martes": 1,
+        "Miércoles": 2,
+        "Jueves": 2,
+        "Viernes": 3,
+        "Sábado": 5,
+        "Domingo": 2
+      }
+    },
+    "ELENA SACRISTAN": {
+      "URA": 10,
+      "PEDIA": 3,
+      "TRAUMA": 2,
+      "PSIQUIA": 2,
+      "GINE": 0,
+      "finDeSemana": 8,
+      "total": 17,
+      "porDia": {
+        "Lunes": 2,
+        "Martes": 5,
+        "Miércoles": 2,
+        "Jueves": 0,
+        "Viernes": 3,
+        "Sábado": 4,
+        "Domingo": 1
+      }
+    },
+    "ENRIQUE GALLEGO": {
+      "URA": 12,
+      "PEDIA": 2,
+      "TRAUMA": 2,
+      "PSIQUIA": 0,
+      "GINE": 0,
+      "finDeSemana": 9,
+      "total": 16,
+      "porDia": {
+        "Lunes": 4,
+        "Martes": 1,
+        "Miércoles": 1,
+        "Jueves": 1,
+        "Viernes": 4,
+        "Sábado": 2,
+        "Domingo": 3
+      }
+    },
+    "MARIA ALICIA POSSE": {
+      "URA": 11,
+      "PEDIA": 3,
+      "TRAUMA": 2,
+      "PSIQUIA": 0,
+      "GINE": 1,
+      "finDeSemana": 9,
+      "total": 17,
+      "porDia": {
+        "Lunes": 3,
+        "Martes": 1,
+        "Miércoles": 2,
+        "Jueves": 2,
+        "Viernes": 3,
+        "Sábado": 2,
+        "Domingo": 4
+      }
+    },
+    "MARIA GOMEZ CAMPO": {
+      "URA": 13,
+      "PEDIA": 2,
+      "TRAUMA": 2,
+      "PSIQUIA": 0,
+      "GINE": 2,
+      "finDeSemana": 9,
+      "total": 19,
+      "porDia": {
+        "Lunes": 4,
+        "Martes": 3,
+        "Miércoles": 2,
+        "Jueves": 1,
+        "Viernes": 3,
+        "Sábado": 3,
+        "Domingo": 3
+      }
+    },
+    "MARÍA GÓMEZ JORGE": {
+      "URA": 12,
+      "PEDIA": 3,
+      "TRAUMA": 2,
+      "PSIQUIA": 0,
+      "GINE": 1,
+      "finDeSemana": 9,
+      "total": 18,
+      "porDia": {
+        "Lunes": 3,
+        "Martes": 3,
+        "Miércoles": 1,
+        "Jueves": 2,
+        "Viernes": 3,
+        "Sábado": 4,
+        "Domingo": 2
+      }
+    },
+    "MARTA RUS": {
+      "URA": 12,
+      "PEDIA": 2,
+      "TRAUMA": 3,
+      "PSIQUIA": 0,
+      "GINE": 1,
+      "finDeSemana": 8,
+      "total": 18,
+      "porDia": {
+        "Lunes": 2,
+        "Martes": 2,
+        "Miércoles": 3,
+        "Jueves": 3,
+        "Viernes": 4,
+        "Sábado": 2,
+        "Domingo": 2
+      }
+    },
+    "NOELIA MEDINA": {
+      "URA": 11,
+      "PEDIA": 3,
+      "TRAUMA": 2,
+      "PSIQUIA": 2,
+      "GINE": 0,
+      "finDeSemana": 8,
+      "total": 18,
+      "porDia": {
+        "Lunes": 2,
+        "Martes": 3,
+        "Miércoles": 3,
+        "Jueves": 2,
+        "Viernes": 4,
+        "Sábado": 2,
+        "Domingo": 2
+      }
+    },
+    "SARA MORALES": {
+      "URA": 13,
+      "PEDIA": 1,
+      "TRAUMA": 4,
+      "PSIQUIA": 0,
+      "GINE": 0,
+      "finDeSemana": 8,
+      "total": 18,
+      "porDia": {
+        "Lunes": 3,
+        "Martes": 2,
+        "Miércoles": 4,
+        "Jueves": 1,
+        "Viernes": 2,
+        "Sábado": 6,
+        "Domingo": 0
+      }
+    },
+    "SONIA GONZALEZ": {
+      "URA": 12,
+      "PEDIA": 3,
+      "TRAUMA": 2,
+      "PSIQUIA": 0,
+      "GINE": 0,
+      "finDeSemana": 10,
+      "total": 17,
+      "porDia": {
+        "Lunes": 2,
+        "Martes": 1,
+        "Miércoles": 1,
+        "Jueves": 3,
+        "Viernes": 5,
+        "Sábado": 3,
+        "Domingo": 2
+      }
+    }
+  },
+  "fechaExportacion": "2025-09-04T10:41:24.880Z",
+  "version": "1.0"
+}
