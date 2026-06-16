@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión de Guardias - Residentes R2</title>
+    <title>Sistema de Gestión de Guardias - Residentes R3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -18,15 +18,15 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 20px;
+            gap: 14px;
             max-width: none;
         }
         
         .calendar-day {
-            min-height: 320px;
+            min-height: 260px;
             border: 2px solid #d1d5db;
             border-radius: 16px;
-            padding: 20px;
+            padding: 16px;
             background: linear-gradient(to bottom, white, #f9fafb);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
@@ -39,8 +39,8 @@
         
         .day-header {
             font-weight: bold;
-            font-size: 22px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            margin-bottom: 14px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -166,6 +166,39 @@
             transform: translateY(-1px);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        .day-select-btn {
+            border: 0;
+            background: transparent;
+            padding: 0;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .day-select-btn:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 4px;
+            border-radius: 10px;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .status-chip.warn {
+            background: #fff7ed;
+            color: #c2410c;
+            border-color: #fed7aa;
+        }
         
         .guard-name {
             font-weight: 600;
@@ -268,6 +301,7 @@
         .specialty-trauma { background: #fed7aa !important; }
         .specialty-psiquia { background: #dbeafe !important; }
         .specialty-gine { background: #fce7f3 !important; }
+        .specialty-rural { background: #d1fae5 !important; }
         
         .weekend-day { background: #fef3c7 !important; color: #92400e !important; }
         .normal-day { background: #f0f9ff !important; }
@@ -473,6 +507,56 @@
             }
         }
         
+        /* Tema gris suave para reducir el brillo de la pantalla */
+        body {
+            background: #cbd5e1;
+            color: #1f2937;
+        }
+
+        #app {
+            background: #cbd5e1 !important;
+        }
+
+        .card,
+        .modal-content {
+            background: #e5e7eb;
+            border-color: #cbd5e1;
+        }
+
+        .card-header {
+            border-color: #cbd5e1;
+        }
+
+        .calendar-day {
+            background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+            border-color: #9ca3af;
+        }
+
+        .guard-item,
+        .form-select,
+        .custom-table,
+        .custom-table th,
+        .resident-name {
+            background-color: #f3f4f6 !important;
+        }
+
+        .guard-item:hover,
+        .custom-table tbody tr:hover {
+            background-color: #e5e7eb !important;
+        }
+
+        .bg-white {
+            background-color: #f3f4f6 !important;
+        }
+
+        .table-container {
+            background: #f3f4f6;
+        }
+
+        .modal {
+            background: rgba(15, 23, 42, 0.65);
+        }
+
         /* Estilos optimizados para impresión/PDF */
         @media print {
             body {
@@ -596,7 +680,7 @@
 
     <script>
         // Datos base
-        const residentes = {
+        let residentes = {
             'ÁLVARO PACHECO': 'PACHE',
             'ANA MARTIN MUELA': 'ANEKA',
             'BLANCA URBIZU': 'BLANCH',
@@ -611,31 +695,50 @@
             'SONIA GONZALEZ': 'SONIA'
         };
 
-        const nombresCompletos = Object.keys(residentes);
+        let nombresCompletos = Object.keys(residentes);
 
-        const especialidades = {
+        let especialidades = {
             'URA': { nombre: 'Urgencias', color: 'bg-purple-300 text-purple-800' },
             'PEDIA': { nombre: 'Pediatría', color: 'bg-red-300 text-red-800' },
             'TRAUMA': { nombre: 'Traumatología', color: 'bg-orange-300 text-orange-800' },
             'PSIQUIA': { nombre: 'Psiquiatría', color: 'bg-blue-300 text-blue-800' },
-            'GINE': { nombre: 'Ginecología', color: 'bg-pink-300 text-pink-800' }
+            'GINE': { nombre: 'Ginecología', color: 'bg-pink-300 text-pink-800' },
+            'RURAL': { nombre: 'Rural', color: 'bg-emerald-300 text-emerald-900' }
         };
 
         const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
         const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
                       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const añosDisponibles = [2026, 2027];
 
         // Estado de la aplicación
+        function refrescarCatalogos() {
+            nombresCompletos = Object.keys(residentes).sort((a, b) => (residentes[a] || '').localeCompare(residentes[b] || ''));
+        }
+
+        function normalizarEspecialidadesCatalogo(catalogo = {}) {
+            const base = {
+                URA: { nombre: 'Urgencias', color: 'bg-purple-300 text-purple-800' },
+                PEDIA: { nombre: 'Pediatría', color: 'bg-red-300 text-red-800' },
+                TRAUMA: { nombre: 'Traumatología', color: 'bg-orange-300 text-orange-800' },
+                PSIQUIA: { nombre: 'Psiquiatría', color: 'bg-blue-300 text-blue-800' },
+                GINE: { nombre: 'Ginecología', color: 'bg-pink-300 text-pink-800' },
+                RURAL: { nombre: 'Rural', color: 'bg-emerald-300 text-emerald-900' }
+            };
+            return Object.fromEntries(Object.entries({ ...base, ...catalogo }));
+        }
+
         let estado = {
             mesActual: 0,
-            añoActual: 2025,
+            añoActual: 2026,
             diaSeleccionado: 1,
             especialidadSeleccionada: 'URA',
             residenteSeleccionado: nombresCompletos[0],
             mostrarModalReinicio: false,
             guardiasPorMes: {},
             viernesEspeciales: {},
-            contadoresTotales: {}
+            contadoresPorAño: {},
+            historialAcciones: []
         };
 
         // Inicializar contadores
@@ -643,7 +746,7 @@
             const inicial = {};
             nombresCompletos.forEach(nombre => {
                 inicial[nombre] = {
-                    URA: 0, PEDIA: 0, TRAUMA: 0, PSIQUIA: 0, GINE: 0,
+                    URA: 0, PEDIA: 0, TRAUMA: 0, PSIQUIA: 0, GINE: 0, RURAL: 0,
                     finDeSemana: 0, total: 0,
                     porDia: { Lunes: 0, Martes: 0, Miércoles: 0, Jueves: 0, Viernes: 0, Sábado: 0, Domingo: 0 }
                 };
@@ -651,28 +754,131 @@
             return inicial;
         }
 
+        function normalizarContadores(contadores = {}) {
+            const base = inicializarContadores();
+            nombresCompletos.forEach(nombre => {
+                const existente = contadores[nombre] || {};
+                base[nombre] = {
+                    ...base[nombre],
+                    ...existente,
+                    RURAL: existente.RURAL || 0,
+                    porDia: {
+                        ...base[nombre].porDia,
+                        ...(existente.porDia || {})
+                    }
+                };
+            });
+            return base;
+        }
+
+        function normalizarGuardiasPorMes(guardias = {}) {
+            const normalizado = {};
+            Object.entries(guardias || {}).forEach(([keyMes, dias]) => {
+                if (!dias || typeof dias !== 'object') return;
+                normalizado[keyMes] = {};
+                Object.entries(dias).forEach(([dia, especialidadesDia]) => {
+                    if (!especialidadesDia || typeof especialidadesDia !== 'object') return;
+                    normalizado[keyMes][dia] = {};
+                    Object.entries(especialidadesDia).forEach(([especialidad, residentesDia]) => {
+                        if (!Array.isArray(residentesDia)) return;
+                        normalizado[keyMes][dia][especialidad] = [...new Set(
+                            residentesDia.filter(nombre => nombresCompletos.includes(nombre))
+                        )];
+                    });
+                });
+            });
+            return normalizado;
+        }
+
+        function pushHistorial(accion) {
+            estado.historialAcciones.unshift({ ...accion, timestamp: new Date().toISOString() });
+            estado.historialAcciones = estado.historialAcciones.slice(0, 20);
+        }
+
+        function reconstruirContadoresDesdeGuardias() {
+            const nuevos = {};
+            añosDisponibles.forEach(año => {
+                nuevos[año] = inicializarContadores();
+            });
+
+            Object.entries(estado.guardiasPorMes || {}).forEach(([keyMes, diasMes]) => {
+                const [añoStr, mesStr] = keyMes.split('-');
+                const año = parseInt(añoStr, 10);
+                const mes = parseInt(mesStr, 10);
+                if (!nuevos[año]) nuevos[año] = inicializarContadores();
+
+                Object.entries(diasMes || {}).forEach(([diaStr, especialidadesDia]) => {
+                    const dia = parseInt(diaStr, 10);
+                    const diaSemanaIndex = getDiaDeLaSemana(dia, mes, año);
+                    const esPrefestivo = diaSemanaIndex === 4 && estado.viernesEspeciales[`${año}-${mes}-${dia}`] === true;
+                    const diaSemana = esPrefestivo ? 'Viernes' : (diaSemanaIndex === 0 ? 'Domingo' : dias[diaSemanaIndex - 1]);
+                    const cuentaFds = esFinDeSemana(dia, mes, año) || esPrefestivo;
+
+                    Object.entries(especialidadesDia || {}).forEach(([especialidad, residentesDia]) => {
+                        (residentesDia || []).forEach(nombreCompleto => {
+                            if (!nuevos[año][nombreCompleto]) return;
+                            nuevos[año][nombreCompleto][especialidad] += 1;
+                            nuevos[año][nombreCompleto].total += 1;
+                            nuevos[año][nombreCompleto].porDia[diaSemana] += 1;
+                            if (cuentaFds) nuevos[año][nombreCompleto].finDeSemana += 1;
+                        });
+                    });
+                });
+            });
+
+            estado.contadoresPorAño = nuevos;
+            return nuevos;
+        }
+
+        function obtenerContadoresAño(año = estado.añoActual) {
+            if (!estado.contadoresPorAño[año]) {
+                estado.contadoresPorAño[año] = inicializarContadores();
+            } else {
+                estado.contadoresPorAño[año] = normalizarContadores(estado.contadoresPorAño[año]);
+            }
+            return estado.contadoresPorAño[año];
+        }
+
+        Object.defineProperty(estado, 'contadoresTotales', {
+            get() {
+                return obtenerContadoresAño(estado.añoActual);
+            },
+            set(valor) {
+                estado.contadoresPorAño[estado.añoActual] = normalizarContadores(valor);
+            }
+        });
+
         // Cargar datos del localStorage
         function cargarDatos() {
             try {
                 if (typeof(Storage) !== "undefined" && localStorage) {
-                    const guardias = localStorage.getItem('guardias-por-mes-2025');
-                    const viernes = localStorage.getItem('viernes-especiales-2025');
-                    const contadores = localStorage.getItem('contadores-totales-2025');
+                    const guardias = localStorage.getItem('guardias-por-mes-2026-2027');
+                    const viernes = localStorage.getItem('viernes-especiales-2026-2027');
+                    const historial = localStorage.getItem('historial-acciones-2026-2027');
+                    const residentesGuardados = localStorage.getItem('residentes-2026-2027');
+                    const especialidadesGuardadas = localStorage.getItem('especialidades-2026-2027');
                     
-                    estado.guardiasPorMes = guardias ? JSON.parse(guardias) : {};
+                    estado.guardiasPorMes = normalizarGuardiasPorMes(guardias ? JSON.parse(guardias) : {});
                     estado.viernesEspeciales = viernes ? JSON.parse(viernes) : {};
-                    estado.contadoresTotales = contadores ? JSON.parse(contadores) : inicializarContadores();
+                    estado.historialAcciones = historial ? JSON.parse(historial) : [];
+                    if (residentesGuardados) residentes = JSON.parse(residentesGuardados);
+                    if (especialidadesGuardadas) especialidades = normalizarEspecialidadesCatalogo(JSON.parse(especialidadesGuardadas));
+                    refrescarCatalogos();
+                    reconstruirContadoresDesdeGuardias();
                 } else {
                     console.warn('localStorage no disponible, usando valores por defecto');
                     estado.guardiasPorMes = {};
                     estado.viernesEspeciales = {};
-                    estado.contadoresTotales = inicializarContadores();
+                    estado.historialAcciones = [];
+                    reconstruirContadoresDesdeGuardias();
                 }
             } catch (e) {
                 console.warn('Error al cargar datos:', e);
                 estado.guardiasPorMes = {};
                 estado.viernesEspeciales = {};
-                estado.contadoresTotales = inicializarContadores();
+                estado.historialAcciones = [];
+                refrescarCatalogos();
+                reconstruirContadoresDesdeGuardias();
             }
         }
 
@@ -680,9 +886,12 @@
         function guardarDatos() {
             try {
                 if (typeof(Storage) !== "undefined" && localStorage) {
-                    localStorage.setItem('guardias-por-mes-2025', JSON.stringify(estado.guardiasPorMes));
-                    localStorage.setItem('viernes-especiales-2025', JSON.stringify(estado.viernesEspeciales));
-                    localStorage.setItem('contadores-totales-2025', JSON.stringify(estado.contadoresTotales));
+                    reconstruirContadoresDesdeGuardias();
+                    localStorage.setItem('guardias-por-mes-2026-2027', JSON.stringify(estado.guardiasPorMes));
+                    localStorage.setItem('viernes-especiales-2026-2027', JSON.stringify(estado.viernesEspeciales));
+                    localStorage.setItem('historial-acciones-2026-2027', JSON.stringify(estado.historialAcciones));
+                    localStorage.setItem('residentes-2026-2027', JSON.stringify(residentes));
+                    localStorage.setItem('especialidades-2026-2027', JSON.stringify(especialidades));
                 }
             } catch (e) {
                 console.warn('Error al guardar datos:', e);
@@ -692,12 +901,17 @@
         // Funciones para JSON Import/Export
         function exportarJSON() {
             try {
+                reconstruirContadoresDesdeGuardias();
+                const ahora = new Date().toISOString();
                 const datos = {
+                    version: "3.0",
+                    schema: "guardias-calendario",
                     guardiasPorMes: estado.guardiasPorMes,
                     viernesEspeciales: estado.viernesEspeciales,
-                    contadoresTotales: estado.contadoresTotales,
-                    fechaExportacion: new Date().toISOString(),
-                    version: "1.0"
+                    contadoresPorAño: estado.contadoresPorAño,
+                    historialAcciones: estado.historialAcciones,
+                    fechaExportacion: ahora,
+                    generadoDesde: "calendario_guardias_2026_2027.html"
                 };
                 
                 const jsonString = JSON.stringify(datos, null, 2);
@@ -710,6 +924,7 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
+                localStorage.setItem('ultimo-backup-2026-2027', ahora);
                 
                 mostrarNotificacion('✅ Backup JSON creado correctamente!<br>Puedes compartir este archivo con tus compañeros', 'success');
             } catch (error) {
@@ -730,17 +945,23 @@
             reader.onload = function(e) {
                 try {
                     const datos = JSON.parse(e.target.result);
-                    
-                    // Validar estructura del JSON
-                    if (!datos.guardiasPorMes || !datos.viernesEspeciales || !datos.contadoresTotales) {
-                        throw new Error('El archivo JSON no tiene la estructura correcta');
+
+                    if (!datos || typeof datos !== 'object') {
+                        throw new Error('El archivo JSON no es válido');
+                    }
+                    if (!datos.guardiasPorMes || typeof datos.guardiasPorMes !== 'object') {
+                        throw new Error('Falta "guardiasPorMes"');
+                    }
+                    if (!datos.viernesEspeciales || typeof datos.viernesEspeciales !== 'object') {
+                        throw new Error('Falta "viernesEspeciales"');
                     }
                     
                     // Confirmar importación
                     if (confirm('¿Estás seguro de que quieres importar estos datos?\n\nEsto reemplazará todos los datos actuales.')) {
-                        estado.guardiasPorMes = datos.guardiasPorMes;
-                        estado.viernesEspeciales = datos.viernesEspeciales;
-                        estado.contadoresTotales = datos.contadoresTotales;
+                        estado.guardiasPorMes = normalizarGuardiasPorMes(datos.guardiasPorMes);
+                        estado.viernesEspeciales = datos.viernesEspeciales || {};
+                        estado.historialAcciones = Array.isArray(datos.historialAcciones) ? datos.historialAcciones.slice(0, 20) : [];
+                        reconstruirContadoresDesdeGuardias();
                         
                         guardarDatos();
                         renderizar();
@@ -786,32 +1007,16 @@
         // Funciones principales
         function marcarJuevesFestivo(dia) {
             const clave = `${estado.añoActual}-${estado.mesActual}-${dia}`;
+            pushHistorial({
+                tipo: 'toggle-festivo',
+                clave,
+                snapshotViernes: estado.viernesEspeciales[clave] === true
+            });
             
             if (estado.viernesEspeciales[clave]) {
                 delete estado.viernesEspeciales[clave];
             } else {
                 estado.viernesEspeciales[clave] = true;
-            }
-
-            // Recalcular contadores existentes
-            const guardias = getGuardiasDelMes();
-            const guardiasDelDia = guardias[dia];
-            
-            if (guardiasDelDia) {
-                Object.entries(guardiasDelDia).forEach(([especialidad, residentes]) => {
-                    residentes.forEach(residente => {
-                        const seEstaActivando = estado.viernesEspeciales[clave];
-                        if (seEstaActivando) {
-                            estado.contadoresTotales[residente].porDia.Jueves -= 1;
-                            estado.contadoresTotales[residente].porDia.Viernes += 1;
-                            estado.contadoresTotales[residente].finDeSemana += 1;
-                        } else {
-                            estado.contadoresTotales[residente].porDia.Viernes -= 1;
-                            estado.contadoresTotales[residente].porDia.Jueves += 1;
-                            estado.contadoresTotales[residente].finDeSemana -= 1;
-                        }
-                    });
-                });
             }
 
             guardarDatos();
@@ -820,14 +1025,31 @@
 
         function agregarGuardia(dia, especialidad, nombreCompleto) {
             const keyMes = `${estado.añoActual}-${estado.mesActual}`;
+            const guardiasDia = estado.guardiasPorMes[keyMes]?.[dia] || {};
+            const yaEstaEseDia = Object.values(guardiasDia).some(lista => lista.includes(nombreCompleto));
+            const cerca = [dia - 1, dia + 1].some(d => {
+                const guardiasCercanos = estado.guardiasPorMes[keyMes]?.[d];
+                return guardiasCercanos && Object.values(guardiasCercanos).some(lista => lista.includes(nombreCompleto));
+            });
+
+            if (yaEstaEseDia || cerca) {
+                mostrarNotificacion(`⚠️ ${yaEstaEseDia ? 'Ya tiene otra guardia ese día.' : ''}${yaEstaEseDia && cerca ? ' ' : ''}${cerca ? 'Está muy cerca de otra guardia.' : ''}`, 'warning');
+                return;
+            }
             
             if (!estado.guardiasPorMes[keyMes]) estado.guardiasPorMes[keyMes] = {};
             if (!estado.guardiasPorMes[keyMes][dia]) estado.guardiasPorMes[keyMes][dia] = {};
             if (!estado.guardiasPorMes[keyMes][dia][especialidad]) estado.guardiasPorMes[keyMes][dia][especialidad] = [];
             
             if (!estado.guardiasPorMes[keyMes][dia][especialidad].includes(nombreCompleto)) {
+                pushHistorial({
+                    tipo: 'add',
+                    keyMes,
+                    dia,
+                    especialidad,
+                    nombreCompleto
+                });
                 estado.guardiasPorMes[keyMes][dia][especialidad].push(nombreCompleto);
-                actualizarContadores(nombreCompleto, especialidad, dia, 'agregar');
                 guardarDatos();
                 renderizar();
             }
@@ -837,40 +1059,138 @@
             const keyMes = `${estado.añoActual}-${estado.mesActual}`;
             
             if (estado.guardiasPorMes[keyMes]?.[dia]?.[especialidad]) {
+                pushHistorial({
+                    tipo: 'remove',
+                    keyMes,
+                    dia,
+                    especialidad,
+                    nombreCompleto
+                });
                 estado.guardiasPorMes[keyMes][dia][especialidad] = 
                     estado.guardiasPorMes[keyMes][dia][especialidad].filter(r => r !== nombreCompleto);
-                actualizarContadores(nombreCompleto, especialidad, dia, 'quitar');
                 guardarDatos();
                 renderizar();
             }
         }
 
-        function actualizarContadores(nombreCompleto, especialidad, dia, accion) {
-            const incremento = accion === 'agregar' ? 1 : -1;
-            const diaSemanaIndex = getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual);
-            let diaSemana = diaSemanaIndex === 0 ? 'Domingo' : dias[diaSemanaIndex - 1];
-            
-            // Si es jueves festivo, contar como viernes
-            if (diaSemanaIndex === 4 && esViernesEspecial(dia, estado.mesActual, estado.añoActual)) {
-                diaSemana = 'Viernes';
+        function deshacerUltimaAccion() {
+            const accion = estado.historialAcciones.shift();
+            if (!accion) {
+                mostrarNotificacion('ℹ️ No hay acciones para deshacer', 'info');
+                return;
             }
-            
-            estado.contadoresTotales[nombreCompleto][especialidad] += incremento;
-            estado.contadoresTotales[nombreCompleto].total += incremento;
-            estado.contadoresTotales[nombreCompleto].porDia[diaSemana] += incremento;
-            
-            if (esFinDeSemana(dia, estado.mesActual, estado.añoActual) || 
-                (diaSemanaIndex === 4 && esViernesEspecial(dia, estado.mesActual, estado.añoActual))) {
-                estado.contadoresTotales[nombreCompleto].finDeSemana += incremento;
+
+            if (accion.tipo === 'add') {
+                const lista = estado.guardiasPorMes[accion.keyMes]?.[accion.dia]?.[accion.especialidad];
+                if (lista) {
+                    estado.guardiasPorMes[accion.keyMes][accion.dia][accion.especialidad] =
+                        lista.filter(r => r !== accion.nombreCompleto);
+                }
+            } else if (accion.tipo === 'remove') {
+                if (!estado.guardiasPorMes[accion.keyMes]) estado.guardiasPorMes[accion.keyMes] = {};
+                if (!estado.guardiasPorMes[accion.keyMes][accion.dia]) estado.guardiasPorMes[accion.keyMes][accion.dia] = {};
+                if (!estado.guardiasPorMes[accion.keyMes][accion.dia][accion.especialidad]) {
+                    estado.guardiasPorMes[accion.keyMes][accion.dia][accion.especialidad] = [];
+                }
+                if (!estado.guardiasPorMes[accion.keyMes][accion.dia][accion.especialidad].includes(accion.nombreCompleto)) {
+                    estado.guardiasPorMes[accion.keyMes][accion.dia][accion.especialidad].push(accion.nombreCompleto);
+                }
+            } else if (accion.tipo === 'toggle-festivo') {
+                if (accion.snapshotViernes) {
+                    delete estado.viernesEspeciales[accion.clave];
+                } else {
+                    estado.viernesEspeciales[accion.clave] = true;
+                }
             }
+
+            guardarDatos();
+            renderizar();
+            mostrarNotificacion('↩️ Última acción deshecha', 'success');
+        }
+
+        function agregarOActualizarResidente(nombreCompleto, alias) {
+            const nombre = (nombreCompleto || '').trim().toUpperCase();
+            const corto = (alias || '').trim().toUpperCase();
+            if (!nombre || !corto) {
+                mostrarNotificacion('⚠️ Completa nombre y alias', 'warning');
+                return;
+            }
+            residentes[nombre] = corto;
+            refrescarCatalogos();
+            guardarDatos();
+            renderizar();
+            mostrarNotificacion('✅ Residente actualizado', 'success');
+        }
+
+        function eliminarResidente(nombreCompleto) {
+            if (!residentes[nombreCompleto]) return;
+            if (!confirm(`¿Eliminar a ${nombreCompleto}? Se borrará del catálogo.`)) return;
+            delete residentes[nombreCompleto];
+            Object.entries(estado.guardiasPorMes).forEach(([keyMes, diasMes]) => {
+                Object.entries(diasMes || {}).forEach(([dia, especialidadesDia]) => {
+                    Object.entries(especialidadesDia || {}).forEach(([esp, lista]) => {
+                        estado.guardiasPorMes[keyMes][dia][esp] = (lista || []).filter(n => n !== nombreCompleto);
+                    });
+                });
+            });
+            refrescarCatalogos();
+            guardarDatos();
+            renderizar();
+            mostrarNotificacion('✅ Residente eliminado', 'success');
+        }
+
+        function agregarOActualizarEspecialidad(clave, nombre, color) {
+            const k = (clave || '').trim().toUpperCase();
+            const n = (nombre || '').trim();
+            const c = (color || '').trim();
+            if (!k || !n || !c) {
+                mostrarNotificacion('⚠️ Completa clave, nombre y color', 'warning');
+                return;
+            }
+            especialidades[k] = { nombre: n, color: c };
+            guardarDatos();
+            renderizar();
+            mostrarNotificacion('✅ Especialidad actualizada', 'success');
+        }
+
+        function eliminarEspecialidad(clave) {
+            if (!especialidades[clave]) return;
+            if (!confirm(`¿Eliminar la especialidad ${clave}?`)) return;
+            delete especialidades[clave];
+            Object.entries(estado.guardiasPorMes).forEach(([keyMes, diasMes]) => {
+                Object.entries(diasMes || {}).forEach(([dia, especialidadesDia]) => {
+                    delete especialidadesDia[clave];
+                });
+            });
+            guardarDatos();
+            renderizar();
+            mostrarNotificacion('✅ Especialidad eliminada', 'success');
+        }
+
+        function rankingDesequilibrios() {
+            const ranking = nombresCompletos
+                .map(nombre => {
+                    const c = estado.contadoresTotales[nombre];
+                    return { nombre, total: c.total, finde: c.finDeSemana };
+                })
+                .sort((a, b) => b.total - a.total);
+            const media = ranking.length ? ranking.reduce((s, x) => s + x.total, 0) / ranking.length : 0;
+            const mas = ranking[0] || null;
+            const menos = ranking[ranking.length - 1] || null;
+            const masFinde = [...ranking].sort((a, b) => b.finde - a.finde)[0] || null;
+            return { ranking, media, mas, menos, masFinde };
         }
 
         function reiniciarTodo() {
-            estado.contadoresTotales = inicializarContadores();
+            estado.contadoresPorAño = {};
             estado.guardiasPorMes = {};
             estado.viernesEspeciales = {};
-            localStorage.clear();
+            estado.historialAcciones = [];
+            localStorage.removeItem('guardias-por-mes-2026-2027');
+            localStorage.removeItem('viernes-especiales-2026-2027');
+            localStorage.removeItem('historial-acciones-2026-2027');
             estado.mostrarModalReinicio = false;
+            reconstruirContadoresDesdeGuardias();
             renderizar();
             mostrarNotificacion('✅ Todos los datos han sido reiniciados', 'success');
         }
@@ -964,7 +1284,7 @@
                 // Agregar título
                 pdf.setFontSize(24);
                 pdf.setFont(undefined, 'bold');
-                pdf.text(`Calendario de Guardias - ${meses[estado.mesActual]} 2025`, 20, 30);
+                pdf.text(`Calendario de Guardias - ${meses[estado.mesActual]} ${estado.añoActual}`, 20, 30);
                 
                 // Centrar la imagen
                 const xPos = (pdf.internal.pageSize.getWidth() - finalWidth) / 2;
@@ -973,7 +1293,7 @@
                 pdf.addImage(canvas.toDataURL('image/png'), 'PNG', xPos, 40, finalWidth, finalHeight);
                 
                 // Descargar
-                pdf.save(`calendario-guardias-${meses[estado.mesActual]}-2025.pdf`);
+                pdf.save(`calendario-guardias-${meses[estado.mesActual]}-${estado.añoActual}.pdf`);
                 
                 // Restaurar botón
                 originalButton.innerHTML = originalText;
@@ -1041,7 +1361,7 @@
                 // Título página 1
                 pdf.setFontSize(28);
                 pdf.setFont(undefined, 'bold');
-                pdf.text(`Calendario de Guardias - ${meses[estado.mesActual]} 2025`, 20, 30);
+                pdf.text(`Calendario de Guardias - ${meses[estado.mesActual]} ${estado.añoActual}`, 20, 30);
                 
                 // Calcular dimensiones para calendario
                 const pageWidth = pdf.internal.pageSize.getWidth() - 20;
@@ -1083,7 +1403,7 @@
 
                 // Título página 2
                 pdf.setFontSize(28);
-                pdf.text('Contadores Totales - Año 2025', 20, 30);
+                pdf.text(`Contadores Totales - Año ${estado.añoActual}`, 20, 30);
                 
                 // Calcular dimensiones para tablas
                 const pageWidth2 = pdf.internal.pageSize.getWidth() - 40;
@@ -1110,7 +1430,7 @@
                 }
                 
                 // Descargar
-                pdf.save(`sistema-guardias-completo-${meses[estado.mesActual]}-2025.pdf`);
+                pdf.save(`sistema-guardias-completo-${meses[estado.mesActual]}-${estado.añoActual}.pdf`);
                 
                 // Restaurar botón si existe
                 if (originalButton) {
@@ -1152,6 +1472,9 @@
             const totalGuardias = Object.values(estado.contadoresTotales).reduce((sum, contador) => sum + contador.total, 0);
             const juevesFestivos = Object.keys(estado.viernesEspeciales)
                 .filter(key => key.startsWith(`${estado.añoActual}-${estado.mesActual}-`)).length;
+            const balance = rankingDesequilibrios();
+            const ultimoBackup = localStorage.getItem('ultimo-backup-2026-2027');
+            const diasDesdeBackup = ultimoBackup ? Math.floor((Date.now() - new Date(ultimoBackup).getTime()) / 86400000) : null;
 
             return `
                 <div class="mb-8">
@@ -1159,26 +1482,35 @@
                         <h1 class="text-5xl font-bold text-gray-800 mb-3">
                             Sistema de Gestión de Guardias
                         </h1>
-                        <h2 class="text-3xl font-semibold text-blue-600 mb-2">Residentes R2</h2>
-                        <p class="text-gray-600 text-xl">Año 2025 - Gestión completa con contadores automáticos</p>
+                        <h2 class="text-3xl font-semibold text-blue-600 mb-2">Residentes R3</h2>
+                        <p class="text-gray-600 text-xl">Años 2026 y 2027 - Gestión completa con contadores automáticos</p>
                     </div>
                     
                     <div class="card mb-6">
                         <div class="card-content">
                             <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
                                 <div class="flex items-center gap-6">
-                                    <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-4 flex-wrap">
                                         <span class="icon-calendar text-2xl text-blue-500"></span>
-                                        <span class="text-lg font-semibold text-gray-700">Seleccionar Mes</span>
+                                        <span class="text-lg font-semibold text-gray-700">Seleccionar Fecha</span>
                                         <select onchange="cambiarMes(this.value)" class="form-select bg-white border-2 border-gray-300 text-lg font-semibold" style="width: 180px; padding: 10px 14px;">
                                             ${meses.map((mes, index) => 
-                                                `<option value="${index}" ${index === estado.mesActual ? 'selected' : ''}>${mes} 2025</option>`
+                                                `<option value="${index}" ${index === estado.mesActual ? 'selected' : ''}>${mes}</option>`
+                                            ).join('')}
+                                        </select>
+                                        <select onchange="cambiarAño(this.value)" class="form-select bg-white border-2 border-gray-300 text-lg font-semibold" style="width: 120px; padding: 10px 14px;">
+                                            ${añosDisponibles.map(año => 
+                                                `<option value="${año}" ${año === estado.añoActual ? 'selected' : ''}>${año}</option>`
                                             ).join('')}
                                         </select>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-center gap-3 flex-wrap">
+                                    <button onclick="deshacerUltimaAccion()" class="btn" style="padding: 12px 18px; font-size: 15px; font-weight: 700; background: #0f766e; color: white;">
+                                        <span class="icon-refresh"></span>
+                                        Deshacer
+                                    </button>
                                     <input type="file" id="importarArchivo" class="file-input" accept=".json" onchange="importarJSON(event)">
                                     <label for="importarArchivo" class="file-input-label">
                                         <span class="icon-upload"></span>
@@ -1206,7 +1538,7 @@
                     <div class="card mb-6">
                         <div class="card-content">
                             <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🏥 Especialidades Médicas</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                                 ${Object.entries(especialidades).map(([esp, info]) => `
                                     <div class="relative overflow-hidden rounded-xl border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                                         <div class="${info.color} p-6 text-center">
@@ -1261,7 +1593,7 @@
                                         <span class="icon-calendar text-4xl text-blue-500 block mb-3"></span>
                                         <div class="text-sm font-semibold text-blue-700 mb-1">Mes Seleccionado</div>
                                         <div class="text-2xl font-bold text-blue-800">${meses[estado.mesActual]}</div>
-                                        <div class="text-lg font-semibold text-blue-600">2025</div>
+                                        <div class="text-lg font-semibold text-blue-600">${estado.añoActual}</div>
                                     </div>
                                 </div>
                                 <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border-2 border-orange-200 shadow-lg">
@@ -1280,6 +1612,23 @@
                                         <div class="text-sm text-green-600">Año completo</div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
+                                ${(() => {
+                                    const ranking = balance.ranking;
+                                    const mas = balance.mas;
+                                    const menos = balance.menos;
+                                    const masFinde = balance.masFinde;
+                                    return `
+                                        <div class="status-chip warn">Más guardias: ${residentes[mas.nombre]} (${mas.total})</div>
+                                        <div class="status-chip">Menos guardias: ${residentes[menos.nombre]} (${menos.total})</div>
+                                        <div class="status-chip warn">Más fines de semana: ${residentes[masFinde.nombre]} (${masFinde.finde})</div>
+                                    `;
+                                })()}
+                            </div>
+                            <div class="mt-4 flex flex-wrap gap-3">
+                                <span class="status-chip">Media de guardias: ${balance.media.toFixed(1)}</span>
+                                ${diasDesdeBackup === null ? '<span class="status-chip warn">Todavía no hay backup exportado</span>' : (diasDesdeBackup >= 14 ? `<span class="status-chip warn">Han pasado ${diasDesdeBackup} días desde el último backup</span>` : `<span class="status-chip">Último backup hace ${diasDesdeBackup} días</span>`)}
                             </div>
                             <div class="mt-6 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 rounded-xl shadow-md">
                                 <div class="flex items-start gap-4">
@@ -1332,7 +1681,7 @@
                                 <span class="icon-plus text-blue-500 text-3xl"></span>
                                 Asignar Guardia
                             </h3>
-                            <p class="text-gray-600 text-lg">${meses[estado.mesActual]} 2025</p>
+                            <p class="text-gray-600 text-lg">${meses[estado.mesActual]} ${estado.añoActual}</p>
                         </div>
                         
                         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
@@ -1379,6 +1728,66 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card mb-8">
+                    <div class="card-content">
+                        <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                                <span class="icon-edit text-blue-500"></span>
+                                Editar Catálogos
+                            </h3>
+                            <span class="status-chip">Se guarda automáticamente</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="bg-white border border-gray-200 rounded-xl p-5">
+                                <h4 class="text-lg font-bold mb-4 text-gray-800">Residentes</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                                    <input id="nuevoResidenteNombre" class="form-input" placeholder="Nombre completo" value="">
+                                    <input id="nuevoResidenteAlias" class="form-input" placeholder="Alias corto" value="">
+                                </div>
+                                <div class="flex gap-2 mb-4">
+                                    <button onclick="agregarOActualizarResidente(document.getElementById('nuevoResidenteNombre').value, document.getElementById('nuevoResidenteAlias').value)" class="btn" style="background:#2563eb;color:white;">Añadir / Actualizar</button>
+                                </div>
+                                <div class="max-h-72 overflow-auto space-y-2">
+                                    ${nombresCompletos.map(nombre => `
+                                        <div class="flex items-center justify-between gap-3 bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                            <div>
+                                                <div class="font-semibold text-gray-800">${nombre}</div>
+                                                <div class="text-sm text-gray-500">${residentes[nombre]}</div>
+                                            </div>
+                                            <button onclick="eliminarResidente('${nombre.replace(/'/g, "\\'")}')" class="remove-btn">✕</button>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="bg-white border border-gray-200 rounded-xl p-5">
+                                <h4 class="text-lg font-bold mb-4 text-gray-800">Especialidades</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                                    <input id="nuevaEspClave" class="form-input" placeholder="Clave">
+                                    <input id="nuevaEspNombre" class="form-input" placeholder="Nombre">
+                                    <input id="nuevaEspColor" class="form-input" placeholder="Clases Tailwind color">
+                                </div>
+                                <div class="flex gap-2 mb-4">
+                                    <button onclick="agregarOActualizarEspecialidad(document.getElementById('nuevaEspClave').value, document.getElementById('nuevaEspNombre').value, document.getElementById('nuevaEspColor').value)" class="btn" style="background:#0f766e;color:white;">Añadir / Actualizar</button>
+                                </div>
+                                <div class="max-h-72 overflow-auto space-y-2">
+                                    ${Object.entries(especialidades).map(([clave, info]) => `
+                                        <div class="flex items-center justify-between gap-3 bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                            <div>
+                                                <div class="font-semibold text-gray-800">${clave}</div>
+                                                <div class="text-sm text-gray-500">${info.nombre}</div>
+                                                <div class="text-xs text-gray-400">${info.color}</div>
+                                            </div>
+                                            <button onclick="eliminarEspecialidad('${clave}')" class="remove-btn">✕</button>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             `;
         }
 
@@ -1392,7 +1801,7 @@
                     <div class="card-content">
                         <h2 class="text-4xl font-bold mb-8 text-gray-800 text-center flex items-center justify-center gap-4">
                             <span class="icon-calendar text-4xl text-blue-500"></span>
-                            Calendario - ${meses[estado.mesActual]} 2025
+                            Calendario - ${meses[estado.mesActual]} ${estado.añoActual}
                         </h2>
                         
                         <div class="calendar-grid">
@@ -1421,10 +1830,12 @@
                 const esPrefestivo = esViernesEspecial(dia, estado.mesActual, estado.añoActual);
 
                 html += `
-                    <div class="calendar-day">
+                    <div class="calendar-day ${dia === estado.diaSeleccionado ? 'ring-2 ring-blue-400' : ''}">
                         <div class="day-header">
                             <div class="day-info">
-                                <span class="day-number">${dia}</span>
+                                <button class="day-select-btn" onclick="seleccionarDia(${dia})">
+                                    <span class="day-number">${dia}</span>
+                                </button>
                                 <span class="day-name">${diaSemana}</span>
                             </div>
                             <div class="day-badges">
@@ -1438,7 +1849,7 @@
                                 ` : ''}
                             </div>
                         </div>
-                        <div style="space-y: 12px;">
+                        <div style="display:flex; flex-direction:column; gap:10px;">
                             ${Object.keys(especialidades).map(esp => {
                                 const guardiasDia = guardias[dia]?.[esp] || [];
                                 return `
@@ -1470,7 +1881,7 @@
                     <div class="card-content">
                         <h2 class="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-3">
                             <span class="icon-trophy text-3xl text-yellow-500"></span>
-                            Contadores Totales - Año 2025
+                            Contadores Totales - Año ${estado.añoActual}
                         </h2>
                         
                         <div class="grid md:grid-cols-2 gap-8">
@@ -1486,6 +1897,7 @@
                                                 <th class="specialty-trauma">TRA</th>
                                                 <th class="specialty-psiquia">PSI</th>
                                                 <th class="specialty-gine">GIN</th>
+                                                <th class="specialty-rural">RUR</th>
                                                 <th class="total-cell">TOTAL</th>
                                                 <th class="weekend-cell">DE FINDE</th>
                                             </tr>
@@ -1499,6 +1911,7 @@
                                                     <td>${estado.contadoresTotales[nombre].TRAUMA}</td>
                                                     <td>${estado.contadoresTotales[nombre].PSIQUIA}</td>
                                                     <td>${estado.contadoresTotales[nombre].GINE}</td>
+                                                    <td>${estado.contadoresTotales[nombre].RURAL}</td>
                                                     <td class="total-cell">${estado.contadoresTotales[nombre].total}</td>
                                                     <td class="weekend-cell">${estado.contadoresTotales[nombre].finDeSemana}</td>
                                                 </tr>
@@ -1571,6 +1984,21 @@
         // Funciones globales para eventos
         function cambiarMes(mes) {
             estado.mesActual = parseInt(mes);
+            const maxDia = getDiasDelMes(estado.mesActual, estado.añoActual);
+            if (estado.diaSeleccionado > maxDia) estado.diaSeleccionado = maxDia;
+            renderizar();
+        }
+
+        function seleccionarDia(dia) {
+            estado.diaSeleccionado = parseInt(dia, 10);
+            renderizar();
+        }
+
+        function cambiarAño(año) {
+            estado.añoActual = parseInt(año);
+            obtenerContadoresAño(estado.añoActual);
+            const maxDia = getDiasDelMes(estado.mesActual, estado.añoActual);
+            if (estado.diaSeleccionado > maxDia) estado.diaSeleccionado = maxDia;
             renderizar();
         }
 
@@ -1590,7 +2018,14 @@
 
         // Exponer funciones al scope global
         window.cambiarMes = cambiarMes;
+        window.cambiarAño = cambiarAño;
+        window.seleccionarDia = seleccionarDia;
         window.asignarGuardia = asignarGuardia;
+        window.deshacerUltimaAccion = deshacerUltimaAccion;
+        window.agregarOActualizarResidente = agregarOActualizarResidente;
+        window.eliminarResidente = eliminarResidente;
+        window.agregarOActualizarEspecialidad = agregarOActualizarEspecialidad;
+        window.eliminarEspecialidad = eliminarEspecialidad;
         window.marcarJuevesFestivo = marcarJuevesFestivo;
         window.quitarGuardia = quitarGuardia;
         window.exportarJSON = exportarJSON;
@@ -1605,6 +2040,15 @@
         // Inicializar la aplicación
         cargarDatos();
         renderizar();
+        const ultimoBackupGuardado = localStorage.getItem('ultimo-backup-2026-2027');
+        if (!ultimoBackupGuardado) {
+            setTimeout(() => mostrarNotificacion('ℹ️ Recuerda exportar un backup cuando termines cambios importantes', 'info'), 1800);
+        } else {
+            const diasSinBackup = Math.floor((Date.now() - new Date(ultimoBackupGuardado).getTime()) / 86400000);
+            if (diasSinBackup >= 14) {
+                setTimeout(() => mostrarNotificacion(`⚠️ Han pasado ${diasSinBackup} días desde el último backup exportado`, 'warning'), 1800);
+            }
+        }
         
         // Mostrar notificación de bienvenida después de un tiempo
         setTimeout(() => {
