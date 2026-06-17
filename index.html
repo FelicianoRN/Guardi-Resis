@@ -469,7 +469,290 @@
         .notification.info {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
         }
+
+        /* Catálogo de especialidades centrado con cualquier cantidad de tarjetas */
+        .specialties-catalog-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .specialty-catalog-card {
+            flex: 1 1 180px;
+            min-width: 180px;
+            max-width: 220px;
+        }
         
+
+        /* Asignación integrada en el calendario */
+        .calendar-workspace {
+            display: grid;
+            grid-template-columns: 300px minmax(0, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .calendar-sidebar {
+            position: sticky;
+            top: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 18px;
+            background: #f3f4f6;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
+
+        .calendar-main {
+            min-width: 0;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .calendar-main .calendar-grid {
+            min-width: 1120px;
+        }
+
+        .sidebar-section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-specialties {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .sidebar-specialty-btn {
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 10px 8px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+
+        .sidebar-specialty-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12);
+        }
+
+        .sidebar-specialty-btn.selected {
+            border-color: #1d4ed8;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+        }
+
+        .sidebar-residents {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 390px;
+            overflow-y: auto;
+            padding-right: 3px;
+        }
+
+        .resident-drag-card {
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 10px 12px;
+            cursor: grab;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+            user-select: none;
+        }
+
+        .resident-drag-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12);
+        }
+
+        .resident-drag-card:active {
+            cursor: grabbing;
+        }
+
+        .resident-drag-card.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+        }
+
+        .resident-drag-alias {
+            font-size: 14px;
+            font-weight: 800;
+            color: #1e3a8a;
+        }
+
+        .resident-drag-name {
+            margin-top: 2px;
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.25;
+        }
+
+        .sidebar-selection-summary {
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 12px;
+            color: #1e3a8a;
+        }
+
+        .sidebar-add-btn {
+            width: 100%;
+            border: none;
+            border-radius: 11px;
+            padding: 12px 14px;
+            background: #2563eb;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .sidebar-add-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .calendar-workspace.sidebar-collapsed {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .calendar-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .panel-toggle-btn {
+            border: 1px solid #94a3b8;
+            border-radius: 10px;
+            padding: 9px 14px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+        }
+
+        .panel-toggle-btn:hover {
+            background: #e2e8f0;
+            border-color: #64748b;
+            transform: translateY(-1px);
+        }
+
+        .collapsed-panel-note {
+            margin-top: 12px;
+            border: 1px dashed #94a3b8;
+            border-radius: 10px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .specialty-drop-zone {
+            min-height: 58px;
+            border: 2px dashed transparent;
+            border-radius: 12px;
+            padding: 5px;
+            transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .specialty-drop-zone.drop-target {
+            border-color: #2563eb;
+            background: #dbeafe;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+        }
+
+        .specialty-drop-hint {
+            display: none;
+            margin: 5px 2px 7px;
+            border: 1px dashed #2563eb;
+            border-radius: 8px;
+            padding: 7px;
+            background: rgba(255, 255, 255, 0.78);
+            color: #1d4ed8;
+            font-size: 10px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .specialty-drop-zone.drop-target .specialty-drop-hint {
+            display: block;
+        }
+
+        .calendar-day-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .day-add-btn {
+            width: 100%;
+            border: 1px dashed #60a5fa;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 9px;
+            padding: 7px 9px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .day-add-btn:hover {
+            background: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        .drop-help {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.35;
+        }
+
+        @media (max-width: 1100px) {
+            .calendar-workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-sidebar {
+                position: static;
+                max-height: none;
+            }
+
+            .sidebar-residents {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                max-height: 300px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sidebar-residents,
+            .sidebar-specialties {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 1200px) {
             .calendar-day {
                 min-height: 280px;
@@ -559,6 +842,17 @@
 
         /* Estilos optimizados para impresión/PDF */
         @media print {
+            .calendar-sidebar {
+                display: none !important;
+            }
+
+            .calendar-workspace {
+                display: block !important;
+            }
+
+            .calendar-main {
+                overflow: visible !important;
+            }
             body {
                 background: white !important;
                 font-size: 12px;
@@ -701,10 +995,11 @@
             'URA': { nombre: 'Urgencias', color: 'bg-purple-300 text-purple-800' },
             'PEDIA': { nombre: 'Pediatría', color: 'bg-red-300 text-red-800' },
             'TRAUMA': { nombre: 'Traumatología', color: 'bg-orange-300 text-orange-800' },
-            'PSIQUIA': { nombre: 'Psiquiatría', color: 'bg-blue-300 text-blue-800' },
-            'GINE': { nombre: 'Ginecología', color: 'bg-pink-300 text-pink-800' },
             'RURAL': { nombre: 'Rural', color: 'bg-emerald-300 text-emerald-900' }
         };
+
+        // Especialidades retiradas definitivamente: no se cargan, importan ni pueden volver a añadirse.
+        const ESPECIALIDADES_RETIRADAS = new Set(['PSIQUIA', 'GINE']);
 
         const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
         const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
@@ -717,15 +1012,30 @@
         }
 
         function normalizarEspecialidadesCatalogo(catalogo = {}) {
-            const base = {
-                URA: { nombre: 'Urgencias', color: 'bg-purple-300 text-purple-800' },
-                PEDIA: { nombre: 'Pediatría', color: 'bg-red-300 text-red-800' },
-                TRAUMA: { nombre: 'Traumatología', color: 'bg-orange-300 text-orange-800' },
-                PSIQUIA: { nombre: 'Psiquiatría', color: 'bg-blue-300 text-blue-800' },
-                GINE: { nombre: 'Ginecología', color: 'bg-pink-300 text-pink-800' },
-                RURAL: { nombre: 'Rural', color: 'bg-emerald-300 text-emerald-900' }
-            };
-            return Object.fromEntries(Object.entries({ ...base, ...catalogo }));
+            // El catálogo guardado es la fuente de verdad. No se mezclan aquí
+            // las especialidades iniciales, porque eso restauraría las borradas.
+            if (!catalogo || typeof catalogo !== 'object' || Array.isArray(catalogo)) {
+                return {};
+            }
+
+            return Object.fromEntries(
+                Object.entries(catalogo)
+                    .filter(([clave, info]) =>
+                        clave &&
+                        !ESPECIALIDADES_RETIRADAS.has(clave.trim().toUpperCase()) &&
+                        info &&
+                        typeof info === 'object' &&
+                        typeof info.nombre === 'string' &&
+                        typeof info.color === 'string'
+                    )
+                    .map(([clave, info]) => [
+                        clave.trim().toUpperCase(),
+                        {
+                            nombre: info.nombre.trim(),
+                            color: info.color.trim()
+                        }
+                    ])
+            );
         }
 
         let estado = {
@@ -735,39 +1045,57 @@
             especialidadSeleccionada: 'URA',
             residenteSeleccionado: nombresCompletos[0],
             mostrarModalReinicio: false,
+            panelAsignacionVisible: true,
+            catalogosVisibles: false,
             guardiasPorMes: {},
             viernesEspeciales: {},
             contadoresPorAño: {},
             historialAcciones: []
         };
 
-        // Inicializar contadores
+        // Inicializar contadores usando únicamente las especialidades actuales.
+        function crearContadorResidente() {
+            const contadorEspecialidades = Object.fromEntries(
+                Object.keys(especialidades).map(clave => [clave, 0])
+            );
+
+            return {
+                ...contadorEspecialidades,
+                finDeSemana: 0,
+                total: 0,
+                porDia: { Lunes: 0, Martes: 0, Miércoles: 0, Jueves: 0, Viernes: 0, Sábado: 0, Domingo: 0 }
+            };
+        }
+
         function inicializarContadores() {
             const inicial = {};
             nombresCompletos.forEach(nombre => {
-                inicial[nombre] = {
-                    URA: 0, PEDIA: 0, TRAUMA: 0, PSIQUIA: 0, GINE: 0, RURAL: 0,
-                    finDeSemana: 0, total: 0,
-                    porDia: { Lunes: 0, Martes: 0, Miércoles: 0, Jueves: 0, Viernes: 0, Sábado: 0, Domingo: 0 }
-                };
+                inicial[nombre] = crearContadorResidente();
             });
             return inicial;
         }
 
         function normalizarContadores(contadores = {}) {
             const base = inicializarContadores();
+
             nombresCompletos.forEach(nombre => {
                 const existente = contadores[nombre] || {};
-                base[nombre] = {
-                    ...base[nombre],
-                    ...existente,
-                    RURAL: existente.RURAL || 0,
-                    porDia: {
-                        ...base[nombre].porDia,
-                        ...(existente.porDia || {})
-                    }
+                const normalizado = crearContadorResidente();
+
+                Object.keys(especialidades).forEach(clave => {
+                    normalizado[clave] = Number(existente[clave]) || 0;
+                });
+
+                normalizado.finDeSemana = Number(existente.finDeSemana) || 0;
+                normalizado.total = Number(existente.total) || 0;
+                normalizado.porDia = {
+                    ...normalizado.porDia,
+                    ...(existente.porDia || {})
                 };
+
+                base[nombre] = normalizado;
             });
+
             return base;
         }
 
@@ -780,8 +1108,10 @@
                     if (!especialidadesDia || typeof especialidadesDia !== 'object') return;
                     normalizado[keyMes][dia] = {};
                     Object.entries(especialidadesDia).forEach(([especialidad, residentesDia]) => {
+                        const claveEspecialidad = String(especialidad).trim().toUpperCase();
+                        if (ESPECIALIDADES_RETIRADAS.has(claveEspecialidad)) return;
                         if (!Array.isArray(residentesDia)) return;
-                        normalizado[keyMes][dia][especialidad] = [...new Set(
+                        normalizado[keyMes][dia][claveEspecialidad] = [...new Set(
                             residentesDia.filter(nombre => nombresCompletos.includes(nombre))
                         )];
                     });
@@ -815,6 +1145,9 @@
                     const cuentaFds = esFinDeSemana(dia, mes, año) || esPrefestivo;
 
                     Object.entries(especialidadesDia || {}).forEach(([especialidad, residentesDia]) => {
+                        // No contar especialidades que ya no existen en el catálogo.
+                        if (!especialidades[especialidad]) return;
+
                         (residentesDia || []).forEach(nombreCompleto => {
                             if (!nuevos[año][nombreCompleto]) return;
                             nuevos[año][nombreCompleto][especialidad] += 1;
@@ -857,14 +1190,36 @@
                     const historial = localStorage.getItem('historial-acciones-2026-2027');
                     const residentesGuardados = localStorage.getItem('residentes-2026-2027');
                     const especialidadesGuardadas = localStorage.getItem('especialidades-2026-2027');
+                    const panelAsignacionGuardado = localStorage.getItem('panel-asignacion-visible-2026-2027');
+                    const catalogosVisiblesGuardado = localStorage.getItem('catalogos-visibles-2026-2027');
+
+                    if (panelAsignacionGuardado !== null) {
+                        estado.panelAsignacionVisible = panelAsignacionGuardado === 'true';
+                    }
+                    if (catalogosVisiblesGuardado !== null) {
+                        estado.catalogosVisibles = catalogosVisiblesGuardado === 'true';
+                    }
                     
                     estado.guardiasPorMes = normalizarGuardiasPorMes(guardias ? JSON.parse(guardias) : {});
                     estado.viernesEspeciales = viernes ? JSON.parse(viernes) : {};
                     estado.historialAcciones = historial ? JSON.parse(historial) : [];
                     if (residentesGuardados) residentes = JSON.parse(residentesGuardados);
-                    if (especialidadesGuardadas) especialidades = normalizarEspecialidadesCatalogo(JSON.parse(especialidadesGuardadas));
+                    if (especialidadesGuardadas !== null) {
+                        especialidades = normalizarEspecialidadesCatalogo(JSON.parse(especialidadesGuardadas));
+                    }
                     refrescarCatalogos();
+
+                    // Evita mantener seleccionada una especialidad que ya no existe.
+                    if (!especialidades[estado.especialidadSeleccionada]) {
+                        estado.especialidadSeleccionada = Object.keys(especialidades)[0] || '';
+                    }
+
                     reconstruirContadoresDesdeGuardias();
+
+                    // Persistir la migración para borrar definitivamente PSIQUIA y GINE
+                    // de instalaciones que todavía las tuviesen guardadas.
+                    localStorage.setItem('especialidades-2026-2027', JSON.stringify(especialidades));
+                    localStorage.setItem('guardias-por-mes-2026-2027', JSON.stringify(estado.guardiasPorMes));
                 } else {
                     console.warn('localStorage no disponible, usando valores por defecto');
                     estado.guardiasPorMes = {};
@@ -1147,6 +1502,10 @@
                 mostrarNotificacion('⚠️ Completa clave, nombre y color', 'warning');
                 return;
             }
+            if (ESPECIALIDADES_RETIRADAS.has(k)) {
+                mostrarNotificacion('⚠️ Esa especialidad está retirada permanentemente y no puede volver a añadirse', 'warning');
+                return;
+            }
             especialidades[k] = { nombre: n, color: c };
             guardarDatos();
             renderizar();
@@ -1156,12 +1515,20 @@
         function eliminarEspecialidad(clave) {
             if (!especialidades[clave]) return;
             if (!confirm(`¿Eliminar la especialidad ${clave}?`)) return;
+
             delete especialidades[clave];
+
             Object.entries(estado.guardiasPorMes).forEach(([keyMes, diasMes]) => {
                 Object.entries(diasMes || {}).forEach(([dia, especialidadesDia]) => {
                     delete especialidadesDia[clave];
                 });
             });
+
+            // Si era la especialidad seleccionada, elegir otra disponible.
+            if (estado.especialidadSeleccionada === clave) {
+                estado.especialidadSeleccionada = Object.keys(especialidades)[0] || '';
+            }
+
             guardarDatos();
             renderizar();
             mostrarNotificacion('✅ Especialidad eliminada', 'success');
@@ -1461,8 +1828,8 @@
             const app = document.getElementById('app');
             app.innerHTML = `
                 ${renderHeader()}
-                ${renderPanelAsignacion()}
                 ${renderCalendario()}
+                ${renderPanelAsignacion()}
                 ${renderTotales()}
                 ${estado.mostrarModalReinicio ? renderModal() : ''}
             `;
@@ -1538,9 +1905,9 @@
                     <div class="card mb-6">
                         <div class="card-content">
                             <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🏥 Especialidades Médicas</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                            <div class="specialties-catalog-grid">
                                 ${Object.entries(especialidades).map(([esp, info]) => `
-                                    <div class="relative overflow-hidden rounded-xl border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                    <div class="specialty-catalog-card relative overflow-hidden rounded-xl border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                                         <div class="${info.color} p-6 text-center">
                                             <div class="text-2xl font-black mb-2">${esp}</div>
                                             <div class="text-sm font-semibold opacity-90">${info.nombre}</div>
@@ -1676,116 +2043,72 @@
             return `
                 <div class="card mb-8">
                     <div class="card-content">
-                        <div class="text-center mb-6">
-                            <h3 class="text-3xl font-bold text-gray-800 flex items-center justify-center gap-3 mb-2">
-                                <span class="icon-plus text-blue-500 text-3xl"></span>
-                                Asignar Guardia
-                            </h3>
-                            <p class="text-gray-600 text-lg">${meses[estado.mesActual]} ${estado.añoActual}</p>
-                        </div>
-                        
-                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                                <div>
-                                    <label class="form-label text-blue-700">Día del Mes</label>
-                                    <select onchange="estado.diaSeleccionado = parseInt(this.value)" class="form-select bg-white border-blue-300 focus:border-blue-500">
-                                        ${Array.from({ length: getDiasDelMes(estado.mesActual, estado.añoActual) }, (_, i) => i + 1)
-                                            .map(dia => `
-                                                <option value="${dia}" ${dia === estado.diaSeleccionado ? 'selected' : ''}>
-                                                    ${dia} - ${dias[getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual) === 0 ? 6 : getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual) - 1]}
-                                                </option>
-                                            `).join('')}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="form-label text-blue-700">Especialidad</label>
-                                    <select onchange="estado.especialidadSeleccionada = this.value" class="form-select bg-white border-blue-300 focus:border-blue-500">
-                                        ${Object.entries(especialidades).map(([esp, info]) => `
-                                            <option value="${esp}" ${esp === estado.especialidadSeleccionada ? 'selected' : ''}>
-                                                ${esp} - ${info.nombre}
-                                            </option>
-                                        `).join('')}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="form-label text-blue-700">Residente</label>
-                                    <select onchange="estado.residenteSeleccionado = this.value" class="form-select bg-white border-blue-300 focus:border-blue-500">
-                                        ${nombresCompletos.map(nombre => `
-                                            <option value="${nombre}" ${nombre === estado.residenteSeleccionado ? 'selected' : ''}>
-                                                ${residentes[nombre]} - ${nombre}
-                                            </option>
-                                        `).join('')}
-                                    </select>
-                                </div>
-                                <div class="flex items-end">
-                                    <button onclick="asignarGuardia()" 
-                                            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3">
-                                        <span class="icon-plus text-xl"></span>
-                                        <span class="text-lg">Asignar Guardia</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-8">
-                    <div class="card-content">
-                        <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+                        <div class="flex items-center justify-between flex-wrap gap-4 ${estado.catalogosVisibles ? 'mb-6' : ''}">
                             <h3 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
                                 <span class="icon-edit text-blue-500"></span>
                                 Editar Catálogos
                             </h3>
-                            <span class="status-chip">Se guarda automáticamente</span>
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div class="bg-white border border-gray-200 rounded-xl p-5">
-                                <h4 class="text-lg font-bold mb-4 text-gray-800">Residentes</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                                    <input id="nuevoResidenteNombre" class="form-input" placeholder="Nombre completo" value="">
-                                    <input id="nuevoResidenteAlias" class="form-input" placeholder="Alias corto" value="">
-                                </div>
-                                <div class="flex gap-2 mb-4">
-                                    <button onclick="agregarOActualizarResidente(document.getElementById('nuevoResidenteNombre').value, document.getElementById('nuevoResidenteAlias').value)" class="btn" style="background:#2563eb;color:white;">Añadir / Actualizar</button>
-                                </div>
-                                <div class="max-h-72 overflow-auto space-y-2">
-                                    ${nombresCompletos.map(nombre => `
-                                        <div class="flex items-center justify-between gap-3 bg-gray-50 border border-gray-200 rounded-lg p-3">
-                                            <div>
-                                                <div class="font-semibold text-gray-800">${nombre}</div>
-                                                <div class="text-sm text-gray-500">${residentes[nombre]}</div>
-                                            </div>
-                                            <button onclick="eliminarResidente('${nombre.replace(/'/g, "\\'")}')" class="remove-btn">✕</button>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-
-                            <div class="bg-white border border-gray-200 rounded-xl p-5">
-                                <h4 class="text-lg font-bold mb-4 text-gray-800">Especialidades</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-                                    <input id="nuevaEspClave" class="form-input" placeholder="Clave">
-                                    <input id="nuevaEspNombre" class="form-input" placeholder="Nombre">
-                                    <input id="nuevaEspColor" class="form-input" placeholder="Clases Tailwind color">
-                                </div>
-                                <div class="flex gap-2 mb-4">
-                                    <button onclick="agregarOActualizarEspecialidad(document.getElementById('nuevaEspClave').value, document.getElementById('nuevaEspNombre').value, document.getElementById('nuevaEspColor').value)" class="btn" style="background:#0f766e;color:white;">Añadir / Actualizar</button>
-                                </div>
-                                <div class="max-h-72 overflow-auto space-y-2">
-                                    ${Object.entries(especialidades).map(([clave, info]) => `
-                                        <div class="flex items-center justify-between gap-3 bg-gray-50 border border-gray-200 rounded-lg p-3">
-                                            <div>
-                                                <div class="font-semibold text-gray-800">${clave}</div>
-                                                <div class="text-sm text-gray-500">${info.nombre}</div>
-                                                <div class="text-xs text-gray-400">${info.color}</div>
-                                            </div>
-                                            <button onclick="eliminarEspecialidad('${clave}')" class="remove-btn">✕</button>
-                                        </div>
-                                    `).join('')}
-                                </div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                ${estado.catalogosVisibles ? '<span class="status-chip">Se guarda automáticamente</span>' : ''}
+                                <button type="button" class="panel-toggle-btn" onclick="toggleEditarCatalogos()">
+                                    ${estado.catalogosVisibles ? '▲ Ocultar edición' : '▼ Mostrar edición'}
+                                </button>
                             </div>
                         </div>
+
+                        ${estado.catalogosVisibles ? `
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div class="bg-white border border-gray-200 rounded-xl p-5">
+                                    <h4 class="text-lg font-bold mb-4 text-gray-800">Residentes</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                                        <input id="nuevoResidenteNombre" class="form-input" placeholder="Nombre completo" value="">
+                                        <input id="nuevoResidenteAlias" class="form-input" placeholder="Alias corto" value="">
+                                    </div>
+                                    <div class="flex gap-2 mb-4">
+                                        <button onclick="agregarOActualizarResidente(document.getElementById('nuevoResidenteNombre').value, document.getElementById('nuevoResidenteAlias').value)" class="btn" style="background:#2563eb;color:white;">Añadir / Actualizar</button>
+                                    </div>
+                                    <div class="max-h-72 overflow-auto space-y-2">
+                                        ${nombresCompletos.map(nombre => `
+                                            <div class="flex items-center justify-between gap-3 bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                                <div>
+                                                    <div class="font-semibold text-gray-800">${nombre}</div>
+                                                    <div class="text-sm text-gray-500">${residentes[nombre]}</div>
+                                                </div>
+                                                <button onclick="eliminarResidente('${nombre.replace(/'/g, "\\'")}')" class="remove-btn">✕</button>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border border-gray-200 rounded-xl p-5">
+                                    <h4 class="text-lg font-bold mb-4 text-gray-800">Especialidades</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                                        <input id="nuevaEspClave" class="form-input" placeholder="Clave">
+                                        <input id="nuevaEspNombre" class="form-input" placeholder="Nombre">
+                                        <input id="nuevaEspColor" class="form-input" placeholder="Clases Tailwind color">
+                                    </div>
+                                    <div class="flex gap-2 mb-4">
+                                        <button onclick="agregarOActualizarEspecialidad(document.getElementById('nuevaEspClave').value, document.getElementById('nuevaEspNombre').value, document.getElementById('nuevaEspColor').value)" class="btn" style="background:#0f766e;color:white;">Añadir / Actualizar</button>
+                                    </div>
+                                    <div class="max-h-72 overflow-auto space-y-2">
+                                        ${Object.entries(especialidades).map(([clave, info]) => `
+                                            <div class="flex items-center justify-between gap-3 bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                                <div>
+                                                    <div class="font-semibold text-gray-800">${clave}</div>
+                                                    <div class="text-sm text-gray-500">${info.nombre}</div>
+                                                    <div class="text-xs text-gray-400">${info.color}</div>
+                                                </div>
+                                                <button onclick="eliminarEspecialidad('${clave}')" class="remove-btn">✕</button>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="collapsed-panel-note">
+                                El editor está oculto. Pulsa “Mostrar edición” para añadir, modificar o eliminar residentes y especialidades.
+                            </div>
+                        `}
                     </div>
                 </div>
             `;
@@ -1795,33 +2118,107 @@
             const diasDelMes = getDiasDelMes(estado.mesActual, estado.añoActual);
             const primerDia = getDiaDeLaSemana(1, estado.mesActual, estado.añoActual);
             const guardias = getGuardiasDelMes();
-            
+            const especialidadActiva = especialidades[estado.especialidadSeleccionada]
+                ? estado.especialidadSeleccionada
+                : Object.keys(especialidades)[0];
+            const residenteActivo = residentes[estado.residenteSeleccionado]
+                ? estado.residenteSeleccionado
+                : nombresCompletos[0];
+
+            if (especialidadActiva) estado.especialidadSeleccionada = especialidadActiva;
+            if (residenteActivo) estado.residenteSeleccionado = residenteActivo;
+
+            const sidebarEspecialidades = Object.entries(especialidades).map(([esp, info]) => `
+                <button
+                    type="button"
+                    class="sidebar-specialty-btn ${info.color} ${esp === especialidadActiva ? 'selected' : ''}"
+                    onclick="seleccionarEspecialidadSidebar('${esp}')"
+                    title="Seleccionar ${info.nombre}">
+                    <div>${esp}</div>
+                    <div style="font-size:10px; margin-top:2px; opacity:.8;">${info.nombre}</div>
+                </button>
+            `).join('');
+
+            const sidebarResidentes = nombresCompletos.map(nombre => {
+                const nombreSeguro = nombre.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                return `
+                    <div
+                        class="resident-drag-card ${nombre === residenteActivo ? 'selected' : ''}"
+                        draggable="true"
+                        onclick="seleccionarResidenteSidebar('${nombreSeguro}')"
+                        ondragstart="iniciarArrastreResidente(event, '${nombreSeguro}')"
+                        title="Haz clic para seleccionar o arrastra al calendario">
+                        <div class="resident-drag-alias">${residentes[nombre]}</div>
+                        <div class="resident-drag-name">${nombre}</div>
+                    </div>
+                `;
+            }).join('');
+
             let html = `
                 <div class="card mb-8">
                     <div class="card-content">
-                        <h2 class="text-4xl font-bold mb-8 text-gray-800 text-center flex items-center justify-center gap-4">
+                        <h2 class="text-4xl font-bold mb-4 text-gray-800 text-center flex items-center justify-center gap-4">
                             <span class="icon-calendar text-4xl text-blue-500"></span>
                             Calendario - ${meses[estado.mesActual]} ${estado.añoActual}
                         </h2>
-                        
-                        <div class="calendar-grid">
-                            ${dias.map((dia, index) => `
-                                <div class="text-center font-bold p-4 rounded-xl shadow-md border-2 ${
-                                    ['Viernes', 'Sábado', 'Domingo'].includes(dia) 
-                                        ? 'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-300 text-yellow-800' 
-                                        : 'bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300 text-blue-800'
-                                }">
-                                    <span class="text-xl font-bold">${dia}</span>
-                                </div>
-                            `).join('')}
+
+                        <div class="calendar-toolbar">
+                            <span class="status-chip">Arrastra el residente sobre la especialidad exacta del día</span>
+                            <button type="button" class="panel-toggle-btn" onclick="togglePanelAsignacion()">
+                                ${estado.panelAsignacionVisible ? '◀ Ocultar panel de asignación' : '▶ Mostrar panel de asignación'}
+                            </button>
+                        </div>
+
+                        <div class="calendar-workspace ${estado.panelAsignacionVisible ? '' : 'sidebar-collapsed'}">
+                            ${estado.panelAsignacionVisible ? `
+                                <aside class="calendar-sidebar">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-2">Añadir guardia</h3>
+                                    <p class="text-sm text-gray-500 mb-5">Para el botón “Añadir”, selecciona especialidad y residente. Para arrastrar, suelta el residente directamente sobre URA, PEDIA, TRAUMA o RURAL en el día deseado.</p>
+
+                                    <div class="mb-5">
+                                        <div class="sidebar-section-title">1. Especialidad para el botón</div>
+                                        <div class="sidebar-specialties">
+                                            ${sidebarEspecialidades || '<div class="text-sm text-red-600">No hay especialidades disponibles.</div>'}
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-5">
+                                        <div class="sidebar-section-title">2. Residentes</div>
+                                        <div class="sidebar-residents">
+                                            ${sidebarResidentes || '<div class="text-sm text-red-600">No hay residentes disponibles.</div>'}
+                                        </div>
+                                    </div>
+
+                                    <div class="sidebar-selection-summary mb-3">
+                                        <div><strong>Especialidad del botón:</strong> ${especialidadActiva ? `${especialidadActiva} · ${especialidades[especialidadActiva].nombre}` : 'Ninguna'}</div>
+                                        <div class="mt-1"><strong>Residente:</strong> ${residenteActivo ? `${residentes[residenteActivo]} · ${residenteActivo}` : 'Ninguno'}</div>
+                                        <div class="mt-1"><strong>Día seleccionado:</strong> ${estado.diaSeleccionado}</div>
+                                    </div>
+
+                                    <button type="button" class="sidebar-add-btn" onclick="asignarGuardiaADia(${estado.diaSeleccionado})">
+                                        Añadir al día ${estado.diaSeleccionado}
+                                    </button>
+                                    <div class="drop-help">Al arrastrar no importa qué especialidad esté seleccionada: manda la zona exacta donde sueltes al residente.</div>
+                                </aside>
+                            ` : ''}
+
+                            <div class="calendar-main">
+                                <div class="calendar-grid">
+                                    ${dias.map(dia => `
+                                        <div class="text-center font-bold p-4 rounded-xl shadow-md border-2 ${
+                                            ['Viernes', 'Sábado', 'Domingo'].includes(dia)
+                                                ? 'bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-300 text-yellow-800'
+                                                : 'bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300 text-blue-800'
+                                        }">
+                                            <span class="text-xl font-bold">${dia}</span>
+                                        </div>
+                                    `).join('')}
             `;
 
-            // Días vacíos al inicio
             for (let i = 0; i < (primerDia === 0 ? 6 : primerDia - 1); i++) {
-                html += '<div class="calendar-day"></div>';
+                html += '<div class="calendar-day" aria-hidden="true"></div>';
             }
 
-            // Días del mes
             for (let dia = 1; dia <= diasDelMes; dia++) {
                 const diaSemanaIndex = getDiaDeLaSemana(dia, estado.mesActual, estado.añoActual);
                 const diaSemana = dias[diaSemanaIndex === 0 ? 6 : diaSemanaIndex - 1];
@@ -1830,10 +2227,12 @@
                 const esPrefestivo = esViernesEspecial(dia, estado.mesActual, estado.añoActual);
 
                 html += `
-                    <div class="calendar-day ${dia === estado.diaSeleccionado ? 'ring-2 ring-blue-400' : ''}">
+                    <div
+                        class="calendar-day ${dia === estado.diaSeleccionado ? 'ring-2 ring-blue-400' : ''}"
+                        onclick="seleccionarDia(${dia})">
                         <div class="day-header">
                             <div class="day-info">
-                                <button class="day-select-btn" onclick="seleccionarDia(${dia})">
+                                <button class="day-select-btn" onclick="event.stopPropagation(); seleccionarDia(${dia})">
                                     <span class="day-number">${dia}</span>
                                 </button>
                                 <span class="day-name">${diaSemana}</span>
@@ -1842,27 +2241,43 @@
                                 ${esFDS ? '<span class="badge-fds">FDS</span>' : ''}
                                 ${esPrefestivo ? '<span class="badge-prefestivo">PREFESTIVO</span>' : ''}
                                 ${esJueves ? `
-                                    <button onclick="marcarJuevesFestivo(${dia})" 
+                                    <button onclick="event.stopPropagation(); marcarJuevesFestivo(${dia})"
                                             class="j-button ${esPrefestivo ? 'active' : 'inactive'}">
                                         J*
                                     </button>
                                 ` : ''}
                             </div>
                         </div>
+
+                        <div class="calendar-day-actions">
+                            <button class="day-add-btn" onclick="event.stopPropagation(); asignarGuardiaADia(${dia})">
+                                ＋ Añadir ${residenteActivo ? residentes[residenteActivo] : 'guardia'}
+                            </button>
+                        </div>
+
                         <div style="display:flex; flex-direction:column; gap:10px;">
                             ${Object.keys(especialidades).map(esp => {
                                 const guardiasDia = guardias[dia]?.[esp] || [];
                                 return `
-                                    <div class="specialty-section">
+                                    <div
+                                        class="specialty-section specialty-drop-zone"
+                                        ondragover="permitirSoltarEspecialidad(event, '${esp}')"
+                                        ondragleave="salirZonaSoltarEspecialidad(event)"
+                                        ondrop="soltarResidenteEnEspecialidad(event, ${dia}, '${esp}')"
+                                        title="Suelta aquí un residente para asignarlo a ${esp}">
                                         <div class="specialty-header ${especialidades[esp].color}">
                                             ${esp}
                                         </div>
-                                        ${guardiasDia.map(nombreCompleto => `
-                                            <div class="guard-item">
-                                                <span class="guard-name">${residentes[nombreCompleto]}</span>
-                                                <button class="remove-btn" onclick="quitarGuardia(${dia}, '${esp}', '${nombreCompleto}')">✕</button>
-                                            </div>
-                                        `).join('')}
+                                        <div class="specialty-drop-hint">Suelta aquí para asignar a ${esp}</div>
+                                        ${guardiasDia.map(nombreCompleto => {
+                                            const nombreSeguro = nombreCompleto.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                                            return `
+                                                <div class="guard-item">
+                                                    <span class="guard-name">${residentes[nombreCompleto] || nombreCompleto}</span>
+                                                    <button class="remove-btn" onclick="event.stopPropagation(); quitarGuardia(${dia}, '${esp}', '${nombreSeguro}')">✕</button>
+                                                </div>
+                                            `;
+                                        }).join('')}
                                     </div>
                                 `;
                             }).join('')}
@@ -1871,7 +2286,7 @@
                 `;
             }
 
-            html += '</div></div></div>';
+            html += '</div></div></div></div></div>';
             return html;
         }
 
@@ -1892,12 +2307,9 @@
                                         <thead>
                                             <tr>
                                                 <th class="resident-name">Residente</th>
-                                                <th class="specialty-ura">URA</th>
-                                                <th class="specialty-pedia">PED</th>
-                                                <th class="specialty-trauma">TRA</th>
-                                                <th class="specialty-psiquia">PSI</th>
-                                                <th class="specialty-gine">GIN</th>
-                                                <th class="specialty-rural">RUR</th>
+                                                ${Object.entries(especialidades).map(([esp, info]) => `
+                                                    <th class="${info.color}" title="${info.nombre}">${esp}</th>
+                                                `).join('')}
                                                 <th class="total-cell">TOTAL</th>
                                                 <th class="weekend-cell">DE FINDE</th>
                                             </tr>
@@ -1906,12 +2318,9 @@
                                             ${nombresCompletos.map(nombre => `
                                                 <tr>
                                                     <td class="resident-name">${residentes[nombre]}</td>
-                                                    <td>${estado.contadoresTotales[nombre].URA}</td>
-                                                    <td>${estado.contadoresTotales[nombre].PEDIA}</td>
-                                                    <td>${estado.contadoresTotales[nombre].TRAUMA}</td>
-                                                    <td>${estado.contadoresTotales[nombre].PSIQUIA}</td>
-                                                    <td>${estado.contadoresTotales[nombre].GINE}</td>
-                                                    <td>${estado.contadoresTotales[nombre].RURAL}</td>
+                                                    ${Object.keys(especialidades).map(esp => `
+                                                        <td>${estado.contadoresTotales[nombre][esp] || 0}</td>
+                                                    `).join('')}
                                                     <td class="total-cell">${estado.contadoresTotales[nombre].total}</td>
                                                     <td class="weekend-cell">${estado.contadoresTotales[nombre].finDeSemana}</td>
                                                 </tr>
@@ -2003,7 +2412,107 @@
         }
 
         function asignarGuardia() {
+            if (!estado.especialidadSeleccionada || !especialidades[estado.especialidadSeleccionada]) {
+                mostrarNotificacion('⚠️ No hay una especialidad válida seleccionada', 'warning');
+                return;
+            }
             agregarGuardia(estado.diaSeleccionado, estado.especialidadSeleccionada, estado.residenteSeleccionado);
+        }
+
+        function seleccionarEspecialidadSidebar(clave) {
+            if (!especialidades[clave]) return;
+            estado.especialidadSeleccionada = clave;
+            renderizar();
+        }
+
+        function seleccionarResidenteSidebar(nombreCompleto) {
+            if (!residentes[nombreCompleto]) return;
+            estado.residenteSeleccionado = nombreCompleto;
+            renderizar();
+        }
+
+        function asignarGuardiaADia(dia) {
+            const diaNumero = parseInt(dia, 10);
+            if (!Number.isInteger(diaNumero) || diaNumero < 1 || diaNumero > getDiasDelMes(estado.mesActual, estado.añoActual)) {
+                mostrarNotificacion('⚠️ El día seleccionado no es válido', 'warning');
+                return;
+            }
+            if (!estado.especialidadSeleccionada || !especialidades[estado.especialidadSeleccionada]) {
+                mostrarNotificacion('⚠️ Selecciona una especialidad válida', 'warning');
+                return;
+            }
+            if (!estado.residenteSeleccionado || !residentes[estado.residenteSeleccionado]) {
+                mostrarNotificacion('⚠️ Selecciona un residente válido', 'warning');
+                return;
+            }
+            estado.diaSeleccionado = diaNumero;
+            agregarGuardia(diaNumero, estado.especialidadSeleccionada, estado.residenteSeleccionado);
+        }
+
+        function iniciarArrastreResidente(event, nombreCompleto) {
+            if (!event.dataTransfer || !residentes[nombreCompleto]) return;
+            event.dataTransfer.effectAllowed = 'copy';
+            event.dataTransfer.setData('text/plain', nombreCompleto);
+            event.dataTransfer.setData('application/x-residente-guardia', nombreCompleto);
+            estado.residenteSeleccionado = nombreCompleto;
+        }
+
+        function permitirSoltarEspecialidad(event, especialidad) {
+            if (!especialidades[especialidad]) return;
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
+            event.currentTarget.classList.add('drop-target');
+        }
+
+        function salirZonaSoltarEspecialidad(event) {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+                event.currentTarget.classList.remove('drop-target');
+            }
+        }
+
+        function soltarResidenteEnEspecialidad(event, dia, especialidad) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.currentTarget.classList.remove('drop-target');
+
+            const nombreCompleto = event.dataTransfer
+                ? (event.dataTransfer.getData('application/x-residente-guardia') || event.dataTransfer.getData('text/plain'))
+                : '';
+
+            if (!nombreCompleto || !residentes[nombreCompleto]) {
+                mostrarNotificacion('⚠️ No se pudo identificar al residente arrastrado', 'warning');
+                return;
+            }
+            if (!especialidades[especialidad]) {
+                mostrarNotificacion('⚠️ La especialidad de destino ya no existe', 'warning');
+                return;
+            }
+
+            estado.diaSeleccionado = parseInt(dia, 10);
+            estado.residenteSeleccionado = nombreCompleto;
+            estado.especialidadSeleccionada = especialidad;
+            agregarGuardia(estado.diaSeleccionado, especialidad, nombreCompleto);
+        }
+
+        function togglePanelAsignacion() {
+            estado.panelAsignacionVisible = !estado.panelAsignacionVisible;
+            try {
+                localStorage.setItem('panel-asignacion-visible-2026-2027', String(estado.panelAsignacionVisible));
+            } catch (e) {
+                console.warn('No se pudo guardar la preferencia del panel de asignación:', e);
+            }
+            renderizar();
+        }
+
+        function toggleEditarCatalogos() {
+            estado.catalogosVisibles = !estado.catalogosVisibles;
+            try {
+                localStorage.setItem('catalogos-visibles-2026-2027', String(estado.catalogosVisibles));
+            } catch (e) {
+                console.warn('No se pudo guardar la preferencia del editor de catálogos:', e);
+            }
+            renderizar();
         }
 
         function abrirModalReinicio() {
@@ -2021,6 +2530,15 @@
         window.cambiarAño = cambiarAño;
         window.seleccionarDia = seleccionarDia;
         window.asignarGuardia = asignarGuardia;
+        window.asignarGuardiaADia = asignarGuardiaADia;
+        window.seleccionarEspecialidadSidebar = seleccionarEspecialidadSidebar;
+        window.seleccionarResidenteSidebar = seleccionarResidenteSidebar;
+        window.iniciarArrastreResidente = iniciarArrastreResidente;
+        window.permitirSoltarEspecialidad = permitirSoltarEspecialidad;
+        window.salirZonaSoltarEspecialidad = salirZonaSoltarEspecialidad;
+        window.soltarResidenteEnEspecialidad = soltarResidenteEnEspecialidad;
+        window.togglePanelAsignacion = togglePanelAsignacion;
+        window.toggleEditarCatalogos = toggleEditarCatalogos;
         window.deshacerUltimaAccion = deshacerUltimaAccion;
         window.agregarOActualizarResidente = agregarOActualizarResidente;
         window.eliminarResidente = eliminarResidente;
